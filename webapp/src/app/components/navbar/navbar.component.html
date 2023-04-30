@@ -1,5 +1,5 @@
 <nav
-  class="w-full fixed h-navbar-size bg-charleston-green text-white flex flex-row justify-between items-center">
+  class="w-full sticky shadow-xl z-10 top-0 left-0 h-navbar-size bg-charleston-green text-white flex flex-row justify-between items-center">
   <!--  left block-->
   <div *ngIf="isLoggedIn()" class="mx-2 grid grid-cols-3 w-1/5">
     <button class="navbar-button" (click)="navigate('/search')">

@@ -32,4 +32,10 @@ export class UserService {
     this.cookieService.set('user', JSON.stringify(this.user()))
     if (!this.isLoggedIn()) this.router.navigate(['/login']).then(r => console.log('Redirected:', r))
   })
+
+  private justLoggedInEffect = effect(() => {
+    if (this.isLoggedIn()) {
+      this.router.navigate(['/profile']).then(r => console.log('Redirected:', r))
+    }
+  })
 }
