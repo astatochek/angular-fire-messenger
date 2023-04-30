@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-jetbrains-mono text-white;
+  }
+}
+
+@layer components {
+  .navbar-button {
+    @apply py-1 rounded bg-charleston-green hover:bg-onyx active:border active:border-white-70;
+  }
+
+  .background-with-gradient {
+    background: radial-gradient(circle at top left, rgba(208, 123, 222, 0.5), transparent 40%),
+                radial-gradient(circle at bottom right, rgba(11, 3, 45, 0.6), transparent 40%);
+  }
+}
