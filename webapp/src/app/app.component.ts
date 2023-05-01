@@ -12,20 +12,20 @@ export class AppComponent{
   userService = inject(UserService)
 
   constructor() {
-    setTimeout(() => {
-      this.userService.user.set({
-        username: '',
-        firstName: '',
-        lastName: ''
-      })
-    }, 1000)
     // setTimeout(() => {
     //   this.userService.user.set({
-    //     username: 'asap',
-    //     firstName: 'Ostap',
-    //     lastName: 'Korotchenok'
+    //     username: '',
+    //     firstName: '',
+    //     lastName: ''
     //   })
-    // }, 2000)
+    // }, 0)
+    setTimeout(() => {
+      this.userService.user.set({
+        username: 'astatochek',
+        firstName: 'Ostap',
+        lastName: 'Korotchenok'
+      })
+    }, 0)
   }
 
 }

@@ -14,6 +14,10 @@
     @apply py-1 rounded bg-charleston-green hover:bg-onyx active:border active:border-white-70;
   }
 
+  .input-with-transition {
+    @apply bg-transparent text-sm px-8 py-4 mt-4 border-2 transition ease-in-out duration-300 focus:outline-0 hover:border-white border-white-80 rounded-xl hover:bg-white-10
+  }
+
   .background-with-gradient {
     background: radial-gradient(circle at top left, rgba(209, 17, 151, 0.5), transparent 40%),
                 radial-gradient(circle at bottom right, rgba(11, 3, 45, 0.6), transparent 40%);

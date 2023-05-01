@@ -22,7 +22,7 @@ module.exports = {
       },
       spacing: {
         "navbar-size": "3rem",
-        "form-len": "19rem"
+        "form-len": "20rem"
       }
     },
   },
