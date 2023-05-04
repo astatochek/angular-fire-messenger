@@ -13,6 +13,8 @@ module.exports = {
         "charleston-green": "#2B2B2B",
         "onyx": "#383838",
         "white-10": "rgba(255, 255, 255, 0.1)",
+        "white-20": "rgba(255, 255, 255, 0.2)",
+        "white-30": "rgba(255, 255, 255, 0.3)",
         "white-40": "rgba(255, 255, 255, 0.4)",
         "white-70": "rgba(255, 255, 255, 0.7)",
         "white-80": "rgba(255, 255, 255, 0.8)"

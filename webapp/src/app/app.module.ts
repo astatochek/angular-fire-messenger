@@ -8,13 +8,17 @@ import { LoginComponent } from './components/login/login.component';
 import {FormsModule} from "@angular/forms";
 import { ProfileComponent } from './components/profile/profile.component';
 import {NgOptimizedImage} from "@angular/common";
+import { ChatsComponent } from './components/chats/chats.component';
+import {TruncatePipe} from "./pipes/truncate.pipe";
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    ChatsComponent,
+    TruncatePipe
   ],
     imports: [
         BrowserModule,

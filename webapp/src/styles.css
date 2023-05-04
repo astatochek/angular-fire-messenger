@@ -22,4 +22,39 @@
     background: radial-gradient(circle at top left, rgba(209, 17, 151, 0.5), transparent 40%),
                 radial-gradient(circle at bottom right, rgba(11, 3, 45, 0.6), transparent 40%);
   }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .animated-to-scroll {
+    animation: scroll 10s linear infinite;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-charleston-green
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white-10
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-white-20
+  }
+
+  .direction-rtl {
+    direction: rtl;
+  }
+
+  .direction-ltr {
+    direction: ltr;
+  }
 }

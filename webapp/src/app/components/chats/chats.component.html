@@ -1,0 +1,38 @@
+<main
+  class="w-full h-screen pt-navbar-size bg-dark-purple flex flex-col justify-start items-center">
+  <div class="flex flex-row justify-start items-start h-full w-full">
+    <div class="bg-charleston-green w-72 h-full flex flex-col justify-start overflow-y-auto direction-rtl">
+      <div
+        class="w-full py-3 flex flex-row justify-start items-center select-none cursor-pointer direction-ltr"
+        *ngFor="let chat of chatService.chats()"
+        (click)="chatService.selectChat(chat.id)"
+        [ngClass]="chat.id === chatService.selected() ? 'bg-spanish-viridian' : 'bg-raisin-black'"
+      >
+        <img src="/assets/avatar.png" alt="avatar" class="w-12 rounded-[12px] mx-3">
+        <div>
+          <h1 class="font-bold text-base">
+            {{ chat.interlocutor.username | titlecase }}
+          </h1>
+          <div
+            *ngIf="chat.id === chatService.selected(); else elseBlock"
+            class="font-normal text-sm w-44 overflow-clip whitespace-nowrap"
+          >
+            <p class="animated-to-scroll">
+              {{ chat.messages[chat.messages.length - 1].content }}
+            </p>
+          </div>
+          <ng-template #elseBlock>
+            <p class="font-normal text-sm">
+              {{ chat.messages[chat.messages.length - 1].content | truncate : 20 }}
+            </p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+
+
+

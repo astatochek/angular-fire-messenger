@@ -35,7 +35,7 @@ export class UserService {
 
   private justLoggedInEffect = effect(() => {
     if (this.isLoggedIn()) {
-      this.router.navigate(['/profile']).then(r => console.log('Redirected:', r))
+      this.router.navigate(['/chats']).then(r => console.log('Redirected:', r))
     }
   })
 }
