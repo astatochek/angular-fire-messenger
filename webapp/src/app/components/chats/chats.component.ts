@@ -11,18 +11,6 @@ import {ChatService} from "../../services/chat.service";
 })
 export class ChatsComponent {
   chatService = inject(ChatService)
-  // isMouseOver = signal<number | undefined>(undefined)
-  // isAnimatedToScroll = signal<number | undefined>(undefined)
-  //
-  // handleMouseOver(id: number | undefined) {
-  //   this.isMouseOver.update(() => id)
-  //   delay(500).then(() => {
-  //     if (this.isMouseOver() === id) {
-  //       this.isAnimatedToScroll.update(() => id)
-  //     } else {
-  //       this.isAnimatedToScroll.update(() => undefined)
-  //     }
-  //   })
-  // }
+
 
 }

@@ -37,7 +37,7 @@
   }
 
   ::-webkit-scrollbar {
-    width: 10px;
+    @apply w-2
   }
   ::-webkit-scrollbar-track {
     @apply bg-charleston-green
