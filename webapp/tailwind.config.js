@@ -24,7 +24,10 @@ module.exports = {
       },
       spacing: {
         "navbar-size": "3rem",
-        "form-len": "20rem"
+        "form-len": "20rem",
+        "scroll": "0.5rem",
+        "left-nav-menu": "24.5rem",
+        "left-chat-menu": "24rem"
       }
     },
   },

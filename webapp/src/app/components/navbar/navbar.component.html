@@ -1,7 +1,6 @@
 <nav
   class="w-full sticky shadow-xl z-10 top-0 left-0 h-navbar-size bg-charleston-green text-white flex flex-row justify-between items-center">
-  <!--  left block-->
-  <div *ngIf="isLoggedIn()" class="mx-2 grid grid-cols-3 w-1/5">
+  <div *ngIf="isLoggedIn()" class="px-2 grid grid-cols-3 w-left-nav-menu gap-1">
     <button class="navbar-button" (click)="navigate('/search')">
       Search
     </button>
@@ -12,9 +11,16 @@
       Profile
     </button>
   </div>
-  <!--  right block-->
-  <div *ngIf="isLoggedIn()" class="px-4 py-1 select-all">
-    {{ username() }}
+  <div class="grid grid-cols-3 w-full min-w-fit" *ngIf="isLoggedIn()">
+    <div></div>
+    <div class="px-4 py-1 text-center">
+      <p *ngIf="interlocutor()">
+        Chat: <span class="select-all">{{ (interlocutor()?.username || "") | titlecase | truncate:20 }}</span>
+      </p>
+    </div>
+    <div class="px-4 py-1 select-all text-right">
+      {{ username() }}
+    </div>
   </div>
 
   <!--not logged in-->

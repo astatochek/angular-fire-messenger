@@ -16,6 +16,12 @@ export class ChatService {
 
   chats = signal<IChat[]>([])
   selected = signal<number | undefined>(undefined)
+  interlocutor = computed(() => {
+    const id = this.selected()
+    if (id === undefined) return undefined
+    const idx = this.chats().map(chat => chat.id).indexOf(id)
+    return this.chats()[idx].interlocutor
+  })
 
   private user = computed(() => this.userService.user())
 
@@ -35,9 +41,6 @@ export class ChatService {
         })
       })
     })
-    if (this.chats().length > 0) {
-      this.selected.set(this.chats()[0].id)
-    }
     setInterval(() => {
       this.chats.mutate(next => {
         const selectedId = this.selected()
@@ -53,5 +56,23 @@ export class ChatService {
   selectChat(id: number) {
     if (this.chats().map(chat => chat.id).includes(id))
       this.selected.update(() => id);
+  }
+
+  sendMessage(text: string) {
+    this.chats.mutate(next => {
+      const selectedId = this.selected()
+      if (selectedId !== undefined) {
+        const message: IMessage = {
+          chatId: selectedId,
+          messageId: -1,
+          sender: this.user(),
+          content: text,
+          date: new Date(Date.now())
+        }
+        const chatIdx = next.map(chat => chat.id).indexOf(selectedId)
+        next[chatIdx].messages.push(message)
+        console.log(message)
+      }
+    })
   }
 }

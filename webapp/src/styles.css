@@ -10,6 +10,13 @@
   body {
     @apply font-jetbrains-mono text-white;
   }
+  img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+  }
 }
 
 @layer components {
@@ -45,7 +52,7 @@
   }
 
   ::-webkit-scrollbar {
-    @apply w-2
+    @apply w-scroll
   }
   ::-webkit-scrollbar-track {
     @apply bg-charleston-green
