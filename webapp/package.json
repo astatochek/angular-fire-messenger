@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "^16.0.0-next.0",
     "@angular/router": "^16.0.0-next.0",
     "lodash": "^4.17.21",
+    "lorem-ipsum": "^2.0.8",
     "ngx-cookie-service": "^15.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

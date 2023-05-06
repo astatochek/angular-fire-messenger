@@ -1,7 +1,7 @@
 <main
   class="w-full h-screen pt-navbar-size bg-dark-purple flex flex-col justify-start items-center">
   <div class="flex flex-row justify-start items-start h-full w-full">
-    <div class="bg-charleston-green w-72 h-full flex flex-col justify-start overflow-y-auto direction-rtl">
+    <div class="bg-charleston-green w-96 h-full flex flex-col justify-start overflow-y-auto direction-rtl">
       <div
         class="w-full py-3 flex flex-row justify-start items-center select-none cursor-pointer direction-ltr transition ease-in-out duration-300"
         *ngFor="let chat of chatService.chats()"
@@ -30,6 +30,14 @@
             </p>
           </ng-template>
         </div>
+      </div>
+    </div>
+    <div class="w-full h-full overflow-y-auto flex flex-col justify-start scroll-smooth duration-1000" #wrapper>
+      <div class="w-full flex" #messages
+           *ngFor="let message of chat()?.messages"
+           [ngClass]="message?.senderUsername === userService.user().username ? 'flex-row-reverse' : 'flex-row'"
+      >
+        <app-message [message]="message"/>
       </div>
     </div>
   </div>

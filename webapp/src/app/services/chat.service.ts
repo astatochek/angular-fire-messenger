@@ -5,6 +5,7 @@ import {UserService} from "./user.service";
 import IUser from "../models/user";
 import IMessage from "../models/message";
 import {users} from "../dummies/user.dummies";
+import {generateSampleMessages} from "../dummies/message.dummies";
 
 @Injectable({
   providedIn: 'root'
@@ -21,16 +22,7 @@ export class ChatService {
   private users = users
 
 
-  generateSampleMessages(chatId: number, participants: IUser[], n: number): IMessage[] {
-    return Array(n).fill("").map((val, index) => {
-      return {
-        chatId: chatId,
-        messageId: index,
-        senderUsername: _.sample(participants)?.username || this.user().username,
-        content: `${index}: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`
-      }
-    })
-  }
+
 
   constructor() {
     const numOfMessages = 10
@@ -39,13 +31,14 @@ export class ChatService {
         next.push({
           id: index,
           interlocutor: user,
-          messages: this.generateSampleMessages(index, [user, this.user()], numOfMessages)
+          messages: generateSampleMessages(index, user, this.user(), numOfMessages)
         })
       })
     })
     if (this.chats().length > 0) {
       this.selected.set(this.chats()[0].id)
     }
+
   }
 
   selectChat(id: number) {

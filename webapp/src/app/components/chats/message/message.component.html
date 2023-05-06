@@ -1,0 +1,10 @@
+  <div class="my-4 mx-4 flex flex-col"
+       [ngClass]="message?.senderUsername === userService.user().username ? 'items-end' : 'items-start'"
+  >
+    <p class="text-xs mb-2 text-white-70 font-normal">{{ message?.senderUsername }}</p>
+    <div class="max-w-xl py-2 px-4 bg-raisin-black text-sm"
+         [ngClass]="message?.senderUsername === userService.user().username ? 'rounded-[10px_0_10px_10px]' : 'rounded-[0_10px_10px_10px]'"
+    >
+      {{ message?.content }}
+    </div>
+  </div>
