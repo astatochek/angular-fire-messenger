@@ -1,14 +1,27 @@
 import {Component, inject, Input} from '@angular/core';
 import IMessage from "../../../models/message";
 import {UserService} from "../../../services/user.service";
+import IUser from "../../../models/user";
 
 @Component({
   selector: 'app-message',
-  templateUrl: './message.component.html'
+  templateUrl: './message.component.html',
+  styleUrls: ['./message.component.css']
 })
 export class MessageComponent {
 
-  @Input() message: IMessage | null = null
+  @Input() message: IMessage = {
+    chatId: -1,
+    messageId: -1,
+    sender: {
+      username: '',
+      firstName: '',
+      lastName: '',
+      avatar: ''
+    },
+    content: '',
+    date: new Date()
+  }
 
   userService = inject(UserService)
 }

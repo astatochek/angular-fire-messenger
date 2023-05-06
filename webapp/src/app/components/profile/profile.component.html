@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="flex flex-col justify-end items-center">
-      <img alt="avatar" src="../../../assets/avatar.png" class="w-72 rounded-[500%] shadow">
+      <img alt="avatar" [src]="userService.user().avatar" class="w-72 rounded-[500%] shadow">
       <div class="flex flex-col justify-start items-center w-form-len mt-8">
         <h2 class="font-normal text-lg select-all">{{ userService.user().username }}</h2>
       </div>

@@ -25,7 +25,8 @@ export class AppComponent{
       this.userService.user.set({
         username: 'astatochek',
         firstName: 'Ostap',
-        lastName: 'Korotchenok'
+        lastName: 'Korotchenok',
+        avatar: './assets/avatar1.png'
       })
     }, 0)
   }

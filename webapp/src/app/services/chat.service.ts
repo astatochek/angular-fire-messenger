@@ -38,7 +38,16 @@ export class ChatService {
     if (this.chats().length > 0) {
       this.selected.set(this.chats()[0].id)
     }
-
+    setInterval(() => {
+      this.chats.mutate(next => {
+        const selectedId = this.selected()
+        if (selectedId !== undefined) {
+          const chatIdx = next.map(chat => chat.id).indexOf(selectedId)
+          next[chatIdx].messages.push(generateSampleMessages(next[chatIdx].id, next[chatIdx].interlocutor, this.userService.user(), 1)[0])
+          console.log(next[chatIdx].messages[next[chatIdx].messages.length - 1])
+        }
+      })
+    }, 2000)
   }
 
   selectChat(id: number) {

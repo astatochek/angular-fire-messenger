@@ -1,6 +1,9 @@
+import IUser from "./user";
+
 export default interface IMessage {
   chatId: number
   messageId: number
-  senderUsername: string
+  sender: IUser
   content: string
+  date: Date
 }

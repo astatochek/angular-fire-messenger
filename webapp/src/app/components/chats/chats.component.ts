@@ -31,22 +31,13 @@ export class ChatsComponent implements OnInit, AfterViewInit {
   userService = inject(UserService)
 
   ngOnInit() {
-    setInterval(() => {
-      this.chatService.chats.mutate(next => {
-        const selectedId = this.chatService.selected()
-        if (selectedId !== undefined) {
-          const chatIdx = next.map(chat => chat.id).indexOf(selectedId)
-          next[chatIdx].messages.push(generateSampleMessages(next[chatIdx].id, next[chatIdx].interlocutor, this.userService.user(), 1)[0])
-          console.log(next[chatIdx].messages[next[chatIdx].messages.length - 1])
-        }
-      })
-    }, 2000)
+
   }
 
   @ViewChildren('messages') messages: QueryList<ElementRef>
   @ViewChild('wrapper') wrapper: ElementRef
 
-  // TODO: add smooth enter animation for messages
+
   ngAfterViewInit() {
     if (this.messages.last && this.messages.last.nativeElement) {
       this.messages.last.nativeElement.scrollIntoView()
@@ -58,7 +49,7 @@ export class ChatsComponent implements OnInit, AfterViewInit {
           const parentRect = this.wrapper.nativeElement.getBoundingClientRect();
           const childRect = prev.nativeElement.getBoundingClientRect();
           if (childRect.top >= parentRect.top && childRect.bottom <= parentRect.bottom) {
-            this.messages.last.nativeElement.scrollIntoView() // {behavior: "smooth", block: "end"}
+            this.messages.last.nativeElement.scrollIntoView()
           }
         }
       }

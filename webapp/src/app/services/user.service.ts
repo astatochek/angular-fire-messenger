@@ -14,7 +14,8 @@ export class UserService {
   public user = signal<IUser>({
     username: '',
     firstName: '',
-    lastName: ''
+    lastName: '',
+    avatar: ''
   });
 
   isLoggedIn = computed(() => this.user().username !== "")

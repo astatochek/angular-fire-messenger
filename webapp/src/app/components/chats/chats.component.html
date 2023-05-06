@@ -1,5 +1,5 @@
 <main
-  class="w-full h-screen pt-navbar-size bg-dark-purple flex flex-col justify-start items-center">
+  class="w-full h-screen pt-navbar-size bg-dark-purple chat-background-with-gradient flex flex-col justify-start items-center">
   <div class="flex flex-row justify-start items-start h-full w-full">
     <div class="bg-charleston-green w-96 h-full flex flex-col justify-start overflow-y-auto direction-rtl">
       <div
@@ -11,31 +11,32 @@
           chat.id !== chatService.selected() ? 'hover:bg-charleston-green' : ''
         ]"
       >
-        <img src="/assets/avatar.png" alt="avatar" class="w-12 rounded-[12px] mx-3">
+        <img [src]="chat.interlocutor.avatar" alt="avatar" class="w-12 rounded-[12px] mx-3">
         <div>
           <h1 class="font-bold text-base">
-            {{ chat.interlocutor.username | titlecase }}
+            {{ chat.interlocutor.username | titlecase | truncate : 15 }}
           </h1>
           <div
             *ngIf="chat.id === chatService.selected(); else elseBlock"
             class="font-normal text-sm w-44 overflow-clip whitespace-nowrap"
           >
             <p class="animated-to-scroll">
-              {{ chat.messages[chat.messages.length - 1].content }}
+              {{ chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].content : "" }}
             </p>
           </div>
           <ng-template #elseBlock>
             <p class="font-normal text-sm">
-              {{ chat.messages[chat.messages.length - 1].content | truncate : 20 }}
+              {{ (chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].content : "") | truncate : 20 }}
             </p>
           </ng-template>
         </div>
       </div>
     </div>
-    <div class="w-full h-full overflow-y-auto flex flex-col justify-start scroll-smooth duration-1000" #wrapper>
-      <div class="w-full flex" #messages
+    <div class="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col justify-start scroll-smooth" #wrapper>
+      <div #messages
            *ngFor="let message of chat()?.messages"
-           [ngClass]="message?.senderUsername === userService.user().username ? 'flex-row-reverse' : 'flex-row'"
+           [ngClass]="(message && message.sender.username === userService.user().username) ? 'flex-row-reverse' : 'flex-row'"
+           class="w-full flex justify-start"
       >
         <app-message [message]="message"/>
       </div>

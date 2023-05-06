@@ -26,6 +26,11 @@
                 radial-gradient(circle at bottom right, rgba(11, 3, 45, 0.6), transparent 40%);
   }
 
+  .chat-background-with-gradient {
+    background: radial-gradient(circle at top left, rgba(122, 41, 96, 0.5), transparent 40%),
+    radial-gradient(circle at bottom right, rgba(23, 11, 65, 0.6), transparent 40%);
+  }
+
   @keyframes scroll {
     0% {
       transform: translateX(0);

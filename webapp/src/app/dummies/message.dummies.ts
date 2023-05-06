@@ -24,8 +24,9 @@ export function generateSampleMessages(chatId: number, interlocutor: IUser, user
     return {
       chatId: chatId,
       messageId: index,
-      senderUsername: _.sample(participants)?.username || user.username,
-      content: getMessageContent(Math.floor(Math.random() * 2) + 1)
+      sender: _.sample(participants) || user,
+      content: getMessageContent(Math.floor(Math.random() * 2) + 1),
+      date: new Date(Date.now())
     }
   })
 }
