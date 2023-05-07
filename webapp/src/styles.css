@@ -106,6 +106,17 @@
     }
   }
 
+  @keyframes slideInBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(50%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
   .slide-in-left {
     animation: 0.5s ease-out 0s 1 slideInLeft;
   }
@@ -116,5 +127,9 @@
 
   .slide-in-top {
     animation: 0.5s ease-out 0s 1 slideInTop;
+  }
+
+  .slide-in-bottom {
+    animation: 0.5s ease-out 0s 1 slideInBottom;
   }
 }

@@ -11,6 +11,8 @@ import {NgOptimizedImage} from "@angular/common";
 import {ChatsComponent} from './components/chats/chats.component';
 import {TruncatePipe} from "./pipes/truncate.pipe";
 import {MessageComponent} from './components/chats/message/message.component';
+import { SearchComponent } from './components/search/search.component';
+import { MenuItemComponent } from './components/chats/menu-item/menu-item.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import {MessageComponent} from './components/chats/message/message.component';
     ProfileComponent,
     ChatsComponent,
     TruncatePipe,
-    MessageComponent
+    MessageComponent,
+    SearchComponent,
+    MenuItemComponent
   ],
   imports: [
     BrowserModule,
