@@ -5,8 +5,7 @@ import IUser from "../../../models/user";
 
 @Component({
   selector: 'app-message',
-  templateUrl: './message.component.html',
-  styleUrls: ['./message.component.css']
+  templateUrl: './message.component.html'
 })
 export class MessageComponent {
 

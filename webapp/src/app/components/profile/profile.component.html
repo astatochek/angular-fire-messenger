@@ -1,7 +1,7 @@
 <main
-  class="w-full min-h-screen h-fit pt-navbar-size bg-american-purple background-with-gradient flex flex-col justify-staert items-center">
+  class="w-full min-h-screen overflow-x-hidden h-fit pt-navbar-size bg-american-purple background-with-gradient flex flex-col justify-staert items-center">
   <div class="grid grid-cols-2 w-[60rem] mt-navbar-size">
-    <div class="flex flex-col justify-start items-center mt-2">
+    <div class="flex flex-col justify-start items-center mt-2 slide-in-left">
       <h1 class="font-bold text-4xl mb-5">Profile Info</h1>
       <div class="bg-dark-purple border-2 border-white-40 px-10 py-4 rounded-2xl">
         <div class="flex flex-col justify-start items-center w-form-len">
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col justify-end items-center">
+    <div class="flex flex-col justify-end items-center slide-in-right">
       <img alt="avatar" [src]="userService.user().avatar" class="w-72 rounded-[500%] shadow">
       <div class="flex flex-col justify-start items-center w-form-len mt-8">
         <h2 class="font-normal text-lg select-all">{{ userService.user().username }}</h2>
