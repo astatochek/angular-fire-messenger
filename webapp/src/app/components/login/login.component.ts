@@ -1,5 +1,6 @@
-import {Component, computed, effect, signal} from '@angular/core';
+import {Component, computed, effect, inject, signal} from '@angular/core';
 import * as _ from 'lodash';
+import {UserService} from "../../services/user.service";
 
 interface IForm {
   username: string
@@ -17,6 +18,8 @@ interface IWarning {
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
+  userService = inject(UserService)
+
   form = signal<IForm>({username: '', password: ''})
 
   changeUsername(event: Event) {
@@ -59,9 +62,9 @@ export class LoginComponent {
 
   warningList = computed(() => Object.values(this.warning()))
 
-  formChangedEffect = effect(() => {
-    console.log(this.form())
-  })
+  // formChangedEffect = effect(() => {
+  //   console.log(this.form())
+  // })
 
   clickLogin() {
     if (!this.warningList().every(v => v === '')) {
@@ -69,7 +72,13 @@ export class LoginComponent {
       return
     }
     this.isShowingWarning.update(() => false)
-    console.log('Logging In')
+    // handle login here
+    this.userService.user.set({
+      username: this.form().username,
+      firstName: "First",
+      lastName: "Last",
+      avatar: `./assets/avatar${Math.floor(Math.random() * 10 + 1)}.png`
+    })
   }
 
   shouldShowWarning = computed(() => !this.warningList().every(v => v === ''))

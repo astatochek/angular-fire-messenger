@@ -29,6 +29,9 @@ export class SearchComponent {
   }
 
   goToChat(interlocutor: IUser) {
+    if (!this.chatService.chats().map(chat => chat.interlocutor.username).includes(interlocutor.username)) {
+      this.chatService.addChatWith(interlocutor)
+    }
     this.chatService.selected.set(this.chatService.chats()[this.chatService.chats().map(chat => chat.interlocutor.username).indexOf(interlocutor.username)].id)
     this.router.navigate(['chats']).then(r => console.log('Redirecting:', r))
   }

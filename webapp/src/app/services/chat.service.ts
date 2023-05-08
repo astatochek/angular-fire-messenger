@@ -31,16 +31,16 @@ export class ChatService {
 
 
   constructor() {
-    const numOfMessages = 10
-    this.chats.mutate(next => {
-      this.users.forEach((user, index) => {
-        next.push({
-          id: index,
-          interlocutor: user,
-          messages: generateSampleMessages(index, user, this.user(), numOfMessages)
-        })
-      })
-    })
+    // const numOfMessages = 10
+    // this.chats.mutate(next => {
+    //   this.users.forEach((user, index) => {
+    //     next.push({
+    //       id: index,
+    //       interlocutor: user,
+    //       messages: generateSampleMessages(index, user, this.user(), numOfMessages)
+    //     })
+    //   })
+    // })
     setInterval(() => {
       this.chats.mutate(next => {
         const selectedId = this.selected()
@@ -74,5 +74,18 @@ export class ChatService {
         console.log(message)
       }
     })
+  }
+
+  addChatWith(interlocutor: IUser) {
+    if (this.chats().map(chat => chat.interlocutor.username).includes(interlocutor.username)) {
+      return
+    }
+    // handle a request to server
+    // while not - this:
+    this.chats.mutate(next => next.push({
+      id: next.length + 1,
+      interlocutor: interlocutor,
+      messages: []
+    }))
   }
 }

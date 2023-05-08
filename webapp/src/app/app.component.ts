@@ -14,21 +14,22 @@ export class AppComponent{
   router = inject(Router)
 
   constructor() {
-    // setTimeout(() => {
-    //   this.userService.user.set({
-    //     username: '',
-    //     firstName: '',
-    //     lastName: ''
-    //   })
-    // }, 0)
     setTimeout(() => {
       this.userService.user.set({
-        username: 'astatochek',
-        firstName: 'Ostap',
-        lastName: 'Korotchenok',
-        avatar: './assets/avatar1.png'
+        username: '',
+        firstName: '',
+        lastName: '',
+        avatar: ''
       })
     }, 0)
+    // setTimeout(() => {
+    //   this.userService.user.set({
+    //     username: 'astatochek',
+    //     firstName: 'Ostap',
+    //     lastName: 'Korotchenok',
+    //     avatar: './assets/avatar1.png'
+    //   })
+    // }, 0)
   }
 
 }
