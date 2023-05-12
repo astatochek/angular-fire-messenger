@@ -18,8 +18,7 @@ export class AppComponent{
       this.userService.user.set({
         username: '',
         firstName: '',
-        lastName: '',
-        avatar: ''
+        lastName: ''
       })
     }, 0)
     // setTimeout(() => {
@@ -27,7 +26,6 @@ export class AppComponent{
     //     username: 'astatochek',
     //     firstName: 'Ostap',
     //     lastName: 'Korotchenok',
-    //     avatar: './assets/avatar1.png'
     //   })
     // }, 0)
   }

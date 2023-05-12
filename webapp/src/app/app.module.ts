@@ -13,6 +13,7 @@ import {TruncatePipe} from "./pipes/truncate.pipe";
 import {MessageComponent} from './components/chats/message/message.component';
 import { SearchComponent } from './components/search/search.component';
 import { MenuItemComponent } from './components/chats/menu-item/menu-item.component';
+import { AvatarComponent } from './components/avatar/avatar.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MenuItemComponent } from './components/chats/menu-item/menu-item.compon
     TruncatePipe,
     MessageComponent,
     SearchComponent,
-    MenuItemComponent
+    MenuItemComponent,
+    AvatarComponent
   ],
   imports: [
     BrowserModule,

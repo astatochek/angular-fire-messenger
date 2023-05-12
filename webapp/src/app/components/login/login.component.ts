@@ -73,12 +73,7 @@ export class LoginComponent {
     }
     this.isShowingWarning.update(() => false)
     // handle login here
-    this.userService.user.set({
-      username: this.form().username,
-      firstName: "First",
-      lastName: "Last",
-      avatar: `./assets/avatar${Math.floor(Math.random() * 10 + 1)}.png`
-    })
+    this.userService.logIn(this.form().username, this.form().password)
   }
 
   shouldShowWarning = computed(() => !this.warningList().every(v => v === ''))

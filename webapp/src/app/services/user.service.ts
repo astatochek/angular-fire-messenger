@@ -14,8 +14,7 @@ export class UserService {
   public user = signal<IUser>({
     username: '',
     firstName: '',
-    lastName: '',
-    avatar: ''
+    lastName: ''
   });
 
   isLoggedIn = computed(() => this.user().username !== "")
@@ -39,4 +38,12 @@ export class UserService {
       this.router.navigate(['/profile']).then(r => console.log('Redirected:', r))
     }
   })
+
+  logIn(username: string, password: string) {
+    this.user.set({
+      username: username,
+      firstName: "First",
+      lastName: "Last"
+    })
+  }
 }
