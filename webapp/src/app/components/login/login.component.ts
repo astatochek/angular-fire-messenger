@@ -42,45 +42,37 @@ export class LoginComponent {
     })
   }
 
-  warning = computed<IWarning>(() => {
-    const res: IWarning = {
-      usernameWarning: "",
-      passwordWarning: "",
-      requestWarning: ""
-    }
-    if (this.form().username === '') {
-      res.usernameWarning = 'Username is not Valid'
-    }
-    if (this.form().password === '') {
-      res.passwordWarning = 'Password is not Valid'
-    }
-
-    return res
-  })
-
-  isShowingWarning = signal<boolean>(false)
-
-  warningList = computed(() => Object.values(this.warning()))
-
-  // formChangedEffect = effect(() => {
-  //   console.log(this.form())
-  // })
+  warning = signal("")
 
   clickLogin() {
-    if (!this.warningList().every(v => v === '')) {
-      this.isShowingWarning.set(true)
+    if (this.form().username === "" && this.form().password === "") {
+      this.warning.set("Username and Password can't be empty")
       return
     }
-    this.isShowingWarning.update(() => false)
-    // handle login here
-    this.userService.logIn(this.form().username, this.form().password)
+    if (this.form().username === "") {
+      this.warning.set("Username can't be empty")
+      return
+    }
+    if (this.form().password === "") {
+      this.warning.set("Password can't be empty")
+      return
+    }
+    this.warning.update(() => "")
+    this.userService.logIn(this.form().username, this.form().password).then(res => {
+      switch (res) {
+        case 401:
+          this.warning.set("Invalid username or password")
+          break
+        case 400:
+          this.warning.set("Server is down :(")
+          break
+      }
+    })
   }
-
-  shouldShowWarning = computed(() => !this.warningList().every(v => v === ''))
 
   clickClose() {
     console.log('Close Clicked')
-    this.isShowingWarning.set(false)
+    this.warning.set("")
   }
 
 }
