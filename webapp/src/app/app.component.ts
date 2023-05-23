@@ -14,20 +14,20 @@ export class AppComponent{
   router = inject(Router)
 
   constructor() {
-    setTimeout(() => {
-      this.userService.user.set({
-        username: '',
-        firstName: '',
-        lastName: ''
-      })
-    }, 0)
     // setTimeout(() => {
     //   this.userService.user.set({
-    //     username: 'astatochek',
-    //     firstName: 'Ostap',
-    //     lastName: 'Korotchenok',
+    //     username: '',
+    //     firstName: '',
+    //     lastName: ''
     //   })
     // }, 0)
+    setTimeout(() => {
+      this.userService.user.set({
+        username: 'astatochek',
+        firstName: 'Ostap',
+        lastName: 'Korotchenok',
+      })
+    }, 0)
   }
 
 }

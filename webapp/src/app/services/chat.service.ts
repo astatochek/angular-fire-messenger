@@ -25,22 +25,27 @@ export class ChatService {
 
   private user = computed(() => this.userService.user())
 
-  private users = users
-
-
+  private users: IUser[] = []
 
 
   constructor() {
-    // const numOfMessages = 10
-    // this.chats.mutate(next => {
-    //   this.users.forEach((user, index) => {
-    //     next.push({
-    //       id: index,
-    //       interlocutor: user,
-    //       messages: generateSampleMessages(index, user, this.user(), numOfMessages)
-    //     })
-    //   })
-    // })
+    const numOfChats = 5
+    for (let i = 0; i < numOfChats; i++) {
+      let user = _.sample(users)
+      while(user === undefined || this.users.includes(user))
+        user = _.sample(users)
+      this.users.push(user)
+    }
+    const numOfMessages = 10
+    this.chats.mutate(next => {
+      this.users.forEach((user, index) => {
+        next.push({
+          id: index,
+          interlocutor: user,
+          messages: generateSampleMessages(index, user, this.user(), numOfMessages)
+        })
+      })
+    })
     setInterval(() => {
       this.chats.mutate(next => {
         const selectedId = this.selected()
@@ -71,7 +76,7 @@ export class ChatService {
         }
         const chatIdx = next.map(chat => chat.id).indexOf(selectedId)
         next[chatIdx].messages.push(message)
-        console.log(message)
+        // console.log(message)
       }
     })
   }

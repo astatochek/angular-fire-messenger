@@ -30,6 +30,7 @@ export class ProfileComponent {
       if (this.firstName !== "") next.firstName = this.firstName
       if (this.lastName !== "") next.lastName = this.lastName
     })
+    this.clearForm()
   }
 
   protected readonly computed = computed;

@@ -21,7 +21,7 @@
 
 @layer components {
   .navbar-button {
-    @apply py-1 rounded bg-charleston-green hover:bg-onyx active:border active:border-white-70;
+    @apply py-1 rounded bg-transparent hover:bg-onyx active:bg-transparent transition ease-in-out duration-300;
   }
 
   .input-with-transition {

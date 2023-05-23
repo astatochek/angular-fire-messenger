@@ -33,6 +33,9 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   previousSelectedChat: number | undefined = undefined
 
   ngOnInit() {
+    // const chats = this.chatService.chats()
+    // this.chatService.chats.set([])
+    // setTimeout(() => this.chatService.chats.set(chats), 1000)
     this.previousSelectedChat = this.chatService.selected()
   }
 
@@ -59,7 +62,7 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
         if (prev && prev.nativeElement) {
           const parentRect = this.wrapper.nativeElement.getBoundingClientRect();
           const childRect = prev.nativeElement.getBoundingClientRect();
-          console.log(childRect.top, parentRect.top, childRect.bottom, parentRect.bottom)
+          // console.log(childRect.top, parentRect.top, childRect.bottom, parentRect.bottom)
           if (childRect.top >= parentRect.top && childRect.bottom <= parentRect.bottom + 50) {
             // this.messages.last.nativeElement.scrollIntoView()
             this.anchor.nativeElement.scrollIntoView()
