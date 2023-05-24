@@ -1,6 +1,7 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
+import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
 import * as _ from 'lodash';
 import {UserService} from "../../services/user.service";
+import {Router} from "@angular/router";
 
 interface IForm {
   username: string
@@ -17,8 +18,9 @@ interface IWarning {
   selector: 'app-login',
   templateUrl: './login.component.html',
 })
-export class LoginComponent {
+export class LoginComponent{
   userService = inject(UserService)
+  router = inject(Router)
 
   form = signal<IForm>({username: '', password: ''})
 
@@ -42,37 +44,26 @@ export class LoginComponent {
     })
   }
 
-  warning = signal("")
-
   clickLogin() {
     if (this.form().username === "" && this.form().password === "") {
-      this.warning.set("Username and Password can't be empty")
+      this.userService.loginWarning.set("Username and Password can't be empty")
       return
     }
     if (this.form().username === "") {
-      this.warning.set("Username can't be empty")
+      this.userService.loginWarning.set("Username can't be empty")
       return
     }
     if (this.form().password === "") {
-      this.warning.set("Password can't be empty")
+      this.userService.loginWarning.set("Password can't be empty")
       return
     }
-    this.warning.update(() => "")
-    this.userService.logIn(this.form().username, this.form().password).then(res => {
-      switch (res) {
-        case 401:
-          this.warning.set("Invalid username or password")
-          break
-        case 400:
-          this.warning.set("Server is down :(")
-          break
-      }
-    })
+    this.userService.loginWarning.update(() => "")
+    this.userService.logIn(this.form().username, this.form().password)
   }
 
   clickClose() {
     console.log('Close Clicked')
-    this.warning.set("")
+    this.userService.loginWarning.set("")
   }
 
 }

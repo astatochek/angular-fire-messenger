@@ -14,6 +14,7 @@ import {MessageComponent} from './components/chats/message/message.component';
 import { SearchComponent } from './components/search/search.component';
 import { MenuItemComponent } from './components/chats/menu-item/menu-item.component';
 import { AvatarComponent } from './components/avatar/avatar.component';
+import { BlankComponent } from './components/blank/blank.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AvatarComponent } from './components/avatar/avatar.component';
     MessageComponent,
     SearchComponent,
     MenuItemComponent,
-    AvatarComponent
+    AvatarComponent,
+    BlankComponent
   ],
   imports: [
     BrowserModule,

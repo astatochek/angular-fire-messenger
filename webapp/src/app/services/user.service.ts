@@ -17,32 +17,29 @@ export class UserService {
     lastName: ''
   });
 
-  public token = signal("")
+  #token = signal("")
 
-  isLoggedIn = computed(() => this.user().username !== "")
+  token = computed(() => this.#token())
+
+  public loginWarning = signal("")
+
+  isLoggedIn = computed(() => this.token() !== "")
 
   constructor() {
     if (this.cookieService.check('token')) {
-      this.token.set(JSON.parse(this.cookieService.get('token')))
+      console.log('Found Token in Cookies')
+      this.changeToken(this.cookieService.get('token'))
     } else {
-      this.cookieService.set('token', JSON.stringify(this.token()))
-      this.token.set("")
+      this.cookieService.set('token', this.token())
     }
   }
 
-  tokenChangedEffect = effect(() => {
-    if (this.token() != "") {
-      this.getUserInfo()
-    }
-  })
-
-  private userChangeEffect = effect(() => {
-    if (!this.isLoggedIn()) this.router.navigate(['/login']).then(r => console.log('Prevented redirect:', r))
-  })
 
   private justLoggedInEffect = effect(() => {
     if (this.isLoggedIn()) {
-      this.router.navigate(['/profile']).then(r => console.log('Redirected:', r))
+      this.router.navigate(["/profile"]).then(() => {})
+    } else {
+      this.router.navigate(["/login"]).then(() => {})
     }
   })
 
@@ -50,50 +47,76 @@ export class UserService {
   private clientId = "client"
   private port = "8080"
 
-  async logIn(username: string, password: string) {
-    try {
-      console.info("Making a LogIn Request")
-      const response = await fetch(`http://localhost:${this.port}/realms/${this.realm}/protocol/openid-connect/token`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        cache: "no-cache",
-        body: new URLSearchParams({
-          grant_type: 'password',
-          client_id: this.clientId,
-          username: username,
-          password: password
-        })
+  logIn(username: string, password: string) {
+    console.info("Making a LogIn Request")
+    fetch(`http://localhost:${this.port}/realms/${this.realm}/protocol/openid-connect/token`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Origin': 'http://localhost:4200',
+      },
+      cache: "no-cache",
+      body: new URLSearchParams({
+        grant_type: 'password',
+        client_id: this.clientId,
+        username: username,
+        password: password
       })
-      const data = await response.json()
-      if (Object.keys(data).includes("error")) {
-        return 401
-      }
-      this.token.set(data.access_token)
-      return 200
-    } catch (e) {
-      console.error(e)
-      return 400
-    }
+    }).then(response => response.json())
+      .then(data => {
+        console.log(data)
+        if (Object.keys(data).includes("error")) {
+          this.loginWarning.set("Username or Password are Invalid")
+        } else {
+          this.changeToken(data.access_token)
+        }
+      })
+      .catch(e => {
+        console.error(e)
+        this.loginWarning.set("Server is down :(")
+      })
   }
 
-  getUserInfo() {
+  getUserInfo(token: string) {
     fetch(`http://localhost:${this.port}/realms/${this.realm}/protocol/openid-connect/userinfo`, {
       headers: {
-        'Authorization': `Bearer ${this.token()}`
+        'Authorization': `Bearer ${token}`,
+        'Origin': 'http://localhost:4200',
       }
     })
       .then(response => response.json())
       .then(data => {
         console.log(data)
-        this.user.set({
-          username: data.preferred_username,
-          firstName: data.given_name,
-          lastName: data.family_name
-        })
+        if (Object.keys(data).includes("error")) {
+          this.changeToken("")
+        } else {
+          this.user.set({
+            username: data.preferred_username,
+            firstName: data.given_name,
+            lastName: data.family_name
+          })
+        }
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        console.error(error)
+        this.changeToken("")
+      });
+  }
+
+  changeToken(token: string) {
+    console.log("Changing token to:", token)
+    this.#token.set(token)
+    this.cookieService.set('token', token)
+    if (token !== "") {
+      this.getUserInfo(token)
+    } else {
+      console.log("Switch to Null User")
+      this.user.set({
+        username: "",
+        firstName: "",
+        lastName: ""
+      })
+    }
   }
 
 }

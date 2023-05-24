@@ -21,10 +21,10 @@
         </div>
       </div>
     </div>
-    <div [style.visibility]="warning() !== '' ? 'visible': 'hidden'"
+    <div [style.visibility]="userService.loginWarning() !== '' ? 'visible': 'hidden'"
          class="text-red-700 text-sm py-4 px-6 w-full mt-5 border-2 bg-dark-purple border-red-700 rounded-xl flex flex-row justify-between items-center">
       <div>
-        {{ warning() }}
+        {{ userService.loginWarning() }}
       </div>
       <button class="text-xs" (click)="clickClose()">
         ❌
