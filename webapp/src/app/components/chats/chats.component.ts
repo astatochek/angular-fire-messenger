@@ -46,7 +46,6 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngAfterViewInit() {
-    this.chatService.init()
     const selectedMenuItem = document.getElementById(`${this.chatService.selected()}`)
     if (selectedMenuItem) selectedMenuItem.scrollIntoView({ behavior: "smooth" })
     this.anchor.nativeElement.scrollIntoView()

@@ -1,6 +1,7 @@
 import {Component, computed, inject} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {AvatarService} from "../../services/avatar.service";
+import {ChatService} from "../../services/chat.service";
 
 @Component({
   selector: 'app-profile',
@@ -9,7 +10,6 @@ import {AvatarService} from "../../services/avatar.service";
 export class ProfileComponent {
 
   userService = inject(UserService)
-  avatarService = inject(AvatarService)
 
   username = ''
   firstName = ''
@@ -32,6 +32,4 @@ export class ProfileComponent {
     })
     this.clearForm()
   }
-
-  protected readonly computed = computed;
 }

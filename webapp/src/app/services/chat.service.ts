@@ -1,7 +1,6 @@
 import {computed, effect, inject, Injectable, signal} from '@angular/core';
 import * as _ from "lodash";
 import IChat from "../models/chat";
-import {UserService} from "./user.service";
 import IUser from "../models/user";
 import IMessage from "../models/message";
 import {users} from "../dummies/user.dummies";
@@ -11,9 +10,6 @@ import {generateSampleMessages} from "../dummies/message.dummies";
   providedIn: 'root'
 })
 export class ChatService {
-
-  userService = inject(UserService)
-
   chats = signal<IChat[]>([])
   selected = signal<number | undefined>(undefined)
   interlocutor = computed(() => {
@@ -23,13 +19,17 @@ export class ChatService {
     return this.chats()[idx].interlocutor
   })
 
-  private user = computed(() => this.userService.user())
+  private user: IUser
 
   private users: IUser[] = []
 
-  init() {
-    if (this.chats().length === 0 && this.user().username !== '') {
+  init(user: IUser) {
+    this.user = user
+    if (this.chats().length === 0 && this.user.username !== '') {
       this.generateChatsWithMessages()
+      console.log("Initialization Proceeded")
+    } else {
+      console.log("Initialization Rejected")
     }
   }
 
@@ -50,7 +50,7 @@ export class ChatService {
           messages: []
         })
       })
-      const messages = generateSampleMessages(index, user, this.user(), numOfMessages)
+      const messages = generateSampleMessages(index, user, this.user, numOfMessages)
       messages.forEach(message => {
         this.chats.mutate(next => {
           next[index].messages.push(message)
@@ -66,7 +66,9 @@ export class ChatService {
         const selectedId = this.selected()
         if (selectedId !== undefined) {
           const chatIdx = next.map(chat => chat.id).indexOf(selectedId)
-          next[chatIdx].messages.push(generateSampleMessages(next[chatIdx].id, next[chatIdx].interlocutor, this.userService.user(), 1)[0])
+          next[chatIdx]
+            .messages
+            .push(generateSampleMessages(next[chatIdx].id, next[chatIdx].interlocutor, this.user, 1)[0])
         }
       })
     }, 2000)
@@ -84,7 +86,7 @@ export class ChatService {
         const message: IMessage = {
           chatId: selectedId,
           messageId: -1,
-          sender: this.user(),
+          sender: this.user,
           content: text,
           date: new Date(Date.now())
         }

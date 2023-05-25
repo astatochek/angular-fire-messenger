@@ -11,6 +11,7 @@ import {ChatService} from "./chat.service";
 export class UserService {
 
   private cookieService = inject(CookieService)
+  private chatService = inject(ChatService)
   private router = inject(Router)
 
   public user = signal<IUser>({
@@ -34,16 +35,14 @@ export class UserService {
     } else {
       this.cookieService.set('token', this.token())
     }
+
+    effect(() => {
+      if (!this.isLoggedIn()) {
+        this.router.navigate(["/login"]).then(() => {})
+      }
+    })
   }
 
-
-  private justLoggedInEffect = effect(() => {
-    if (this.isLoggedIn()) {
-      // this.router.navigate(["/profile"]).then(() => {})
-    } else {
-      this.router.navigate(["/login"]).then(() => {})
-    }
-  })
 
   logIn(username: string, password: string) {
     console.info("Making a LogIn Request")
@@ -89,11 +88,13 @@ export class UserService {
         if (Object.keys(data).includes("error")) {
           this.changeToken("")
         } else {
-          this.user.set({
+          const next: IUser = {
             username: data.preferred_username,
             firstName: data.given_name,
             lastName: data.family_name
-          })
+          }
+          this.user.set(next)
+          this.chatService.init(next)
         }
       })
       .catch(error => {
