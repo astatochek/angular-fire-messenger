@@ -7,9 +7,11 @@
   <div class="flex flex-col text-center font-light text-xs"
      [ngClass]="message.sender.username === userService.user().username ? 'ml-2' : 'mr-2'"
   >
-    <app-avatar [username]="message.sender.username" class="w-11" >
-      <img [src]="avatarService.repository().get(message.sender.username)" alt="avatar" class="rounded-[50%] w-11 shadow-sm">
-    </app-avatar>
+    <app-avatar
+      [username]="message.sender.username"
+      [styles]="['rounded-[50%]', 'w-11', 'shadow-sm']"
+      class="w-11"
+    />
     <p class="mt-2 select-all">{{ message.date | date:'HH:mm' }}</p>
 
 

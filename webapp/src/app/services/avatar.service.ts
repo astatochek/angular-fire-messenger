@@ -1,32 +1,21 @@
-import {Injectable, signal} from '@angular/core';
+import {Injectable} from '@angular/core';
+import {env} from '../../environments/environment.avatars'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AvatarService {
 
-  repository = signal<Map<string, string>>(new Map())
-
-  get server() {
-    return "http://127.0.0.1:8000"
-  }
-
-  active = true
+  private repo: Map<string, string | undefined> = new Map()
 
   async set(username: string) {
-    if (this.repository().has(username) || username === "" || !this.active) return
-    try {
-      const image = await fetch(`${this.server}/${username}`)
+    if (!this.repo.has(username) || this.repo.get(username) === undefined) {
+      this.repo.set(username, undefined)
+      const image = await fetch(`${env.port}/${username}`)
       const blob = await image.blob()
-      const url = URL.createObjectURL(blob)
-      this.repository().set(username, url)
-    } catch (e) {
-      this.active = false
+      this.repo.set(username, URL.createObjectURL(blob))
     }
+    return this.repo.get(username)
   }
 
-
-  constructor() {
-    setInterval(() => this.active = true, 600000)
-  }
 }

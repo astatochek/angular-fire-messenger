@@ -2,6 +2,8 @@ import {computed, effect, inject, Injectable, signal} from '@angular/core';
 import {CookieService} from 'ngx-cookie-service';
 import IUser from "../models/user";
 import {Router} from "@angular/router";
+import {env} from "../../environments/environment.keycloak";
+import {ChatService} from "./chat.service";
 
 @Injectable({
   providedIn: 'root'
@@ -37,19 +39,15 @@ export class UserService {
 
   private justLoggedInEffect = effect(() => {
     if (this.isLoggedIn()) {
-      this.router.navigate(["/profile"]).then(() => {})
+      // this.router.navigate(["/profile"]).then(() => {})
     } else {
       this.router.navigate(["/login"]).then(() => {})
     }
   })
 
-  private realm = "realm"
-  private clientId = "client"
-  private port = "8080"
-
   logIn(username: string, password: string) {
     console.info("Making a LogIn Request")
-    fetch(`http://localhost:${this.port}/realms/${this.realm}/protocol/openid-connect/token`, {
+    fetch(`http://localhost:${env.port}/realms/${env.realm}/protocol/openid-connect/token`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -58,7 +56,7 @@ export class UserService {
       cache: "no-cache",
       body: new URLSearchParams({
         grant_type: 'password',
-        client_id: this.clientId,
+        client_id: env.clientId,
         username: username,
         password: password
       })
@@ -69,6 +67,7 @@ export class UserService {
           this.loginWarning.set("Username or Password are Invalid")
         } else {
           this.changeToken(data.access_token)
+          this.router.navigate(["/profile"]).then(() => {})
         }
       })
       .catch(e => {
@@ -78,7 +77,7 @@ export class UserService {
   }
 
   getUserInfo(token: string) {
-    fetch(`http://localhost:${this.port}/realms/${this.realm}/protocol/openid-connect/userinfo`, {
+    fetch(`http://localhost:${env.port}/realms/${env.realm}/protocol/openid-connect/userinfo`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Origin': 'http://localhost:4200',

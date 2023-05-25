@@ -4,7 +4,6 @@ import IUser from "../../models/user";
 import {Router} from "@angular/router";
 import {ChatService} from "../../services/chat.service";
 import {UserService} from "../../services/user.service";
-import {AvatarService} from "../../services/avatar.service";
 
 @Component({
   selector: 'app-search',
@@ -14,7 +13,6 @@ export class SearchComponent {
   private router = inject(Router)
   private chatService = inject(ChatService)
   private userService = inject(UserService)
-  avatarService = inject(AvatarService)
 
   keyword = signal("")
   users = computed(() => users.filter(user =>

@@ -6,9 +6,11 @@
           chat.id !== chatService.selected() ? 'hover:bg-charleston-green' : ''
         ]"
 >
-  <app-avatar [username]="chat.interlocutor.username" class="mx-3 w-12" >
-    <img [src]="avatarService.repository().get(chat.interlocutor.username)" alt="avatar" class="w-12 rounded-[12px]">
-  </app-avatar>
+  <app-avatar
+    [username]="chat.interlocutor.username"
+    [styles]="['w-12', 'rounded-[12px]']"
+    class="mx-3 w-12"
+  />
   <div>
     <h1 class="font-bold text-base">
       {{ chat.interlocutor.username | titlecase | truncate : 15 }}

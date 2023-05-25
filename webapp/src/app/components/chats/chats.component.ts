@@ -33,9 +33,6 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   previousSelectedChat: number | undefined = undefined
 
   ngOnInit() {
-    // const chats = this.chatService.chats()
-    // this.chatService.chats.set([])
-    // setTimeout(() => this.chatService.chats.set(chats), 1000)
     this.previousSelectedChat = this.chatService.selected()
   }
 
@@ -49,6 +46,7 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngAfterViewInit() {
+    this.chatService.init()
     const selectedMenuItem = document.getElementById(`${this.chatService.selected()}`)
     if (selectedMenuItem) selectedMenuItem.scrollIntoView({ behavior: "smooth" })
     this.anchor.nativeElement.scrollIntoView()

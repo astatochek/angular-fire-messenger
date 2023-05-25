@@ -42,9 +42,11 @@
           >
             <td [ngClass]="index === users().length - 1 ? 'rounded-bl-xl' : ''">
               <div class="flex justify-center items-center p-2">
-                <app-avatar [username]="user.username" class="h-8">
-                  <img [src]="avatarService.repository().get(user.username)" alt="avatar" class="h-8 rounded-lg">
-                </app-avatar>
+                <app-avatar
+                  [username]="user.username"
+                  [styles]="['h-8', 'rounded-lg']"
+                  class="h-8"
+                />
               </div>
             </td>
             <td class="select-all">

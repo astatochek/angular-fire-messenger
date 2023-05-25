@@ -1,4 +1,11 @@
-import {Component, effect, inject, Input, OnChanges, OnInit, signal} from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  signal,
+} from '@angular/core';
 import {AvatarService} from "../../services/avatar.service";
 
 @Component({
@@ -6,16 +13,32 @@ import {AvatarService} from "../../services/avatar.service";
   templateUrl: './avatar.component.html'
 })
 export class AvatarComponent implements OnInit, OnChanges {
+
   avatarService = inject(AvatarService)
+
   @Input("username") username = ""
+  @Input("styles") styles: string[] = []
+
+  src = signal<string | undefined>(undefined)
+
   ngOnInit(): void {
-    this.avatarService.set(this.username).then(() => {})
-    // console.log('Requesting an avatar for', this.username)
+    this.set()
   }
 
   ngOnChanges(): void {
-    this.avatarService.set(this.username).then(() => {})
+    this.set()
   }
 
+  set(repeat = 2) {
+    if (repeat === 0) return
+    if (this.username === "") {
+      setTimeout(() => {
+        this.set(repeat - 1)
+      }, 5000)
+    } else {
+      this.avatarService.set(this.username)
+        .then(next => this.src.update(prev => (next === undefined) ? prev : next))
+    }
+  }
 
 }

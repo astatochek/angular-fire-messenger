@@ -1,4 +1,4 @@
-import {computed, inject, Injectable, signal} from '@angular/core';
+import {computed, effect, inject, Injectable, signal} from '@angular/core';
 import * as _ from "lodash";
 import IChat from "../models/chat";
 import {UserService} from "./user.service";
@@ -27,8 +27,13 @@ export class ChatService {
 
   private users: IUser[] = []
 
+  init() {
+    if (this.chats().length === 0 && this.user().username !== '') {
+      this.generateChatsWithMessages()
+    }
+  }
 
-  constructor() {
+  private generateChatsWithMessages() {
     const numOfChats = 5
     for (let i = 0; i < numOfChats; i++) {
       let user = _.sample(users)
@@ -37,22 +42,31 @@ export class ChatService {
       this.users.push(user)
     }
     const numOfMessages = 10
-    this.chats.mutate(next => {
-      this.users.forEach((user, index) => {
+    this.users.forEach((user, index) => {
+      this.chats.mutate(next => {
         next.push({
           id: index,
           interlocutor: user,
-          messages: generateSampleMessages(index, user, this.user(), numOfMessages)
+          messages: []
+        })
+      })
+      const messages = generateSampleMessages(index, user, this.user(), numOfMessages)
+      messages.forEach(message => {
+        this.chats.mutate(next => {
+          next[index].messages.push(message)
+          console.log('Sender:', message.sender)
         })
       })
     })
+  }
+
+  constructor() {
     setInterval(() => {
       this.chats.mutate(next => {
         const selectedId = this.selected()
         if (selectedId !== undefined) {
           const chatIdx = next.map(chat => chat.id).indexOf(selectedId)
           next[chatIdx].messages.push(generateSampleMessages(next[chatIdx].id, next[chatIdx].interlocutor, this.userService.user(), 1)[0])
-          // console.log(next[chatIdx].messages[next[chatIdx].messages.length - 1])
         }
       })
     }, 2000)
