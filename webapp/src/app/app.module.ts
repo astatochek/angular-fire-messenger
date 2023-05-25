@@ -14,7 +14,7 @@ import {MessageComponent} from './components/chats/message/message.component';
 import { SearchComponent } from './components/search/search.component';
 import { MenuItemComponent } from './components/chats/menu-item/menu-item.component';
 import { AvatarComponent } from './components/avatar/avatar.component';
-import { BlankComponent } from './components/blank/blank.component';
+import { WarningComponent } from './components/warning/warning.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,7 @@ import { BlankComponent } from './components/blank/blank.component';
     SearchComponent,
     MenuItemComponent,
     AvatarComponent,
-    BlankComponent
+    WarningComponent
   ],
   imports: [
     BrowserModule,

@@ -54,7 +54,6 @@ export class ChatService {
       messages.forEach(message => {
         this.chats.mutate(next => {
           next[index].messages.push(message)
-          console.log('Sender:', message.sender)
         })
       })
     })

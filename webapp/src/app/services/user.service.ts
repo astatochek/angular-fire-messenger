@@ -21,12 +21,11 @@ export class UserService {
   });
 
   #token = signal("")
-
   token = computed(() => this.#token())
+  isLoggedIn = computed(() => this.token() !== "")
 
   public loginWarning = signal("")
-
-  isLoggedIn = computed(() => this.token() !== "")
+  public sessionWarning = signal(false)
 
   constructor() {
     if (this.cookieService.check('token')) {
@@ -104,6 +103,7 @@ export class UserService {
   }
 
   changeToken(token: string) {
+    if (this.token() !== "" && token === "") this.sessionWarning.set(true)
     console.log("Changing token to:", token)
     this.#token.set(token)
     this.cookieService.set('token', token)
