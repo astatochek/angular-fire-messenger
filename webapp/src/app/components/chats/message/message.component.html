@@ -1,0 +1,30 @@
+<div class="flex items-start m-4"
+     [ngClass]="[
+      message.sender.username === userService.user().username ? 'flex-row-reverse' : 'flex-row',
+      message.sender.username === userService.user().username ? 'slide-in-right' : 'slide-in-left'
+     ]"
+>
+  <div class="flex flex-col text-center font-light text-xs"
+     [ngClass]="message.sender.username === userService.user().username ? 'ml-2' : 'mr-2'"
+  >
+    <app-avatar
+      [username]="message.sender.username"
+      [styles]="['rounded-[50%]', 'w-11', 'shadow-sm']"
+      class="w-11"
+    />
+    <p class="mt-2 select-all">{{ message.date | date:'HH:mm' }}</p>
+
+
+  </div>
+  <div class="flex flex-col"
+       [ngClass]="message.sender.username === userService.user().username ? 'items-end' : 'items-start'"
+  >
+    <p class="text-xs mb-2 text-white-70 font-normal select-all">{{ message.sender.username }}</p>
+    <div class="max-w-xl py-2 px-4 bg-raisin-black text-xs hover:bg-charleston-green transition ease-in-out duration-150 shadow-sm"
+         [ngClass]="message.sender.username === userService.user().username ? 'rounded-[10px_0_10px_10px]' : 'rounded-[0_10px_10px_10px]'"
+    >
+      {{ message.content }}
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,35 @@
+<nav
+  class="w-full sticky shadow-xl z-10 top-0 left-0 h-navbar-size bg-charleston-green text-white flex flex-row justify-between items-center">
+  <div *ngIf="isLoggedIn()" class="px-2 grid grid-cols-3 w-left-nav-menu gap-1">
+    <button class="navbar-button" (click)="navigate('/search')">
+      Search
+    </button>
+    <button class="navbar-button" (click)="navigate('/chats')">
+      Chats
+    </button>
+    <button class="navbar-button" (click)="navigate('/profile')">
+      Profile
+    </button>
+  </div>
+  <div class="grid grid-cols-3 w-full min-w-fit" *ngIf="isLoggedIn()">
+    <div></div>
+    <div class="px-4 py-1 text-center">
+      <p *ngIf="interlocutor()" class="">
+        <span class="font-light">Chat with: </span><span class="select-all font-medium">{{ (interlocutor()?.username || "") | titlecase | truncate:15 }}</span>
+      </p>
+    </div>
+    <div class="px-4 py-1 select-all text-right">
+      {{ username() }}
+    </div>
+  </div>
+
+  <!--not logged in-->
+  <div *ngIf="!isLoggedIn()" class="mx-2 grid grid-cols-2 w-1/5">
+    <button class="navbar-button" (click)="navigate('/login')">
+      Sign In
+    </button>
+    <button class="navbar-button" (click)="navigate('/register')">
+      Register
+    </button>
+  </div>
+</nav>
