@@ -1,5 +1,5 @@
 <main
-  class="w-full h-screen overflow-y-auto pt-navbar-size bg-american-purple background-with-gradient flex flex-col justify-start items-center">
+  class="w-full h-screen overflow-y-auto pt-navbar-size pr-scroll bg-american-purple background-with-gradient flex flex-col justify-start items-center">
   <div class="my-16 w-[40rem] flex flex-col justify-start items-center slide-in-bottom">
     <div class="flex items-center w-full">
       <label for="simple-search" class="sr-only">Search</label>
@@ -26,13 +26,17 @@
     </div>
     <div class="min-h-fit w-full mt-2 bg-dark-purple rounded-xl border-2 border-white-40 flex flex-col justify-start items-center">
       <table class="w-full">
-        <thead>
+        <thead class="h-16">
           <tr class="text-left bg-opacity-10 bg-black h-12 text-base">
-            <th class="w-16 rounded-tl-xl"></th>
+            <th class="rounded-tl-xl" [ngClass]="users().length === 0 ? 'rounded-bl-xl' : ''">
+              <div class="flex justify-center items-center py-2 px-2">
+                <div class="h-12 w-12"></div>
+              </div>
+            </th>
             <th class="w-56">Username</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th class="rounded-tr-xl">Link</th>
+            <th class="w-32">First Name</th>
+            <th class="w-32">Last Name</th>
+            <th class="rounded-tr-xl w-24" [ngClass]="users().length === 0 ? 'rounded-br-xl' : ''">Link</th>
           </tr>
         </thead>
         <tbody>
@@ -41,11 +45,11 @@
               [ngClass]="index % 2 === 1 ? 'bg-black' : 'bg-transparent'"
           >
             <td [ngClass]="index === users().length - 1 ? 'rounded-bl-xl' : ''">
-              <div class="flex justify-center items-center p-2">
+              <div class="flex justify-center items-center py-2 px-2">
                 <app-avatar
                   [username]="user.username"
-                  [styles]="['h-8', 'rounded-lg']"
-                  class="h-8"
+                  [styles]="['h-full', 'rounded-lg']"
+                  class="h-12 w-12"
                 />
               </div>
             </td>

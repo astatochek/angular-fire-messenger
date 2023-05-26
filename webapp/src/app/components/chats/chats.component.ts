@@ -48,27 +48,28 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     const selectedMenuItem = document.getElementById(`${this.chatService.selected()}`)
     if (selectedMenuItem) selectedMenuItem.scrollIntoView({ behavior: "smooth" })
-    setTimeout(() => {
-      if (this.newMessageSubscription !== undefined) return
-      this.newMessageSubscription = this.messages.changes.subscribe(() => {
-        if (this.previousSelectedChat !== this.chatService.selected()) {
-          this.previousSelectedChat = this.chatService.selected()
-          this.anchor.nativeElement.scrollIntoView()
-        }
-        else if (this.messages.last && this.messages.last.nativeElement && this.messages.length >= 2) {
-          const prev = this.messages.get(this.messages.length - 2)
-          if (prev && prev.nativeElement) {
-            const parentRect = this.wrapper.nativeElement.getBoundingClientRect();
-            const childRect = prev.nativeElement.getBoundingClientRect();
-            // console.log(childRect.top, parentRect.top, childRect.bottom, parentRect.bottom)
-            if (childRect.top >= parentRect.top && childRect.bottom <= parentRect.bottom + 50) {
-              // this.messages.last.nativeElement.scrollIntoView()
-              this.anchor.nativeElement.scrollIntoView()
-            }
+    // setTimeout(() => {
+    //
+    // }, 0)
+    if (this.newMessageSubscription !== undefined) return
+    this.newMessageSubscription = this.messages.changes.subscribe(() => {
+      if (this.previousSelectedChat !== this.chatService.selected()) {
+        this.previousSelectedChat = this.chatService.selected()
+        this.anchor.nativeElement.scrollIntoView()
+      }
+      else if (this.messages.last && this.messages.last.nativeElement && this.messages.length >= 2) {
+        const prev = this.messages.get(this.messages.length - 2)
+        if (prev && prev.nativeElement) {
+          const parentRect = this.wrapper.nativeElement.getBoundingClientRect();
+          const childRect = prev.nativeElement.getBoundingClientRect();
+          // console.log(childRect.top, parentRect.top, childRect.bottom, parentRect.bottom)
+          if (childRect.top >= parentRect.top && childRect.bottom <= parentRect.bottom + 50) {
+            // this.messages.last.nativeElement.scrollIntoView()
+            this.anchor.nativeElement.scrollIntoView()
           }
         }
-      })
-    }, 1000)
+      }
+    })
     setTimeout(() => this.anchor.nativeElement.scrollIntoView(), 0)
   }
 

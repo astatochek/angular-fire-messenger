@@ -8,7 +8,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply font-jetbrains-mono text-white;
+    @apply font-jetbrains-mono text-white bg-dark-purple;
   }
   img {
     -webkit-user-drag: none;
@@ -52,7 +52,7 @@
   }
 
   ::-webkit-scrollbar {
-    @apply w-scroll
+    @apply w-scroll fixed
   }
   ::-webkit-scrollbar-track {
     @apply bg-charleston-green
