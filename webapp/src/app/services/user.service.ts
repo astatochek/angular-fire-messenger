@@ -102,8 +102,8 @@ export class UserService {
       });
   }
 
-  changeToken(token: string) {
-    if (this.token() !== "" && token === "") this.sessionWarning.set(true)
+  changeToken(token: string, raiseSessionExpiredMessageIfNeeded = true) {
+    if (this.token() !== "" && token === "" && raiseSessionExpiredMessageIfNeeded) this.sessionWarning.set(true)
     console.log("Changing token to:", token)
     this.#token.set(token)
     this.cookieService.set('token', token)

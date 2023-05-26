@@ -8,13 +8,8 @@ import {
   ViewChildren
 } from '@angular/core';
 import {ChatService} from "../../services/chat.service";
-import {generateSampleMessages} from "../../dummies/message.dummies";
 import {UserService} from "../../services/user.service";
-
-const delay = (time: number) => {
-  return new Promise(resolve => setTimeout(resolve, time));
-}
-
+import {Subscription} from "rxjs";
 @Component({
   selector: 'app-chats',
   templateUrl: './chats.component.html',
@@ -30,6 +25,8 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   })
   userService = inject(UserService)
 
+  newMessageSubscription: Subscription
+
   previousSelectedChat: number | undefined = undefined
 
   ngOnInit() {
@@ -37,8 +34,11 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.chatService.selected.set(undefined)
+    if (this.newMessageSubscription !== undefined) {
+      this.newMessageSubscription.unsubscribe()
+    }
   }
+
 
   @ViewChildren('messages') messages: QueryList<ElementRef>
   @ViewChild('wrapper') wrapper: ElementRef
@@ -48,25 +48,28 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     const selectedMenuItem = document.getElementById(`${this.chatService.selected()}`)
     if (selectedMenuItem) selectedMenuItem.scrollIntoView({ behavior: "smooth" })
-    this.anchor.nativeElement.scrollIntoView()
-    this.messages.changes.subscribe(() => {
-      if (this.previousSelectedChat !== this.chatService.selected()) {
-        this.previousSelectedChat = this.chatService.selected()
-        this.anchor.nativeElement.scrollIntoView()
-      }
-      else if (this.messages.last && this.messages.last.nativeElement && this.messages.length >= 2) {
-        const prev = this.messages.get(this.messages.length - 2)
-        if (prev && prev.nativeElement) {
-          const parentRect = this.wrapper.nativeElement.getBoundingClientRect();
-          const childRect = prev.nativeElement.getBoundingClientRect();
-          // console.log(childRect.top, parentRect.top, childRect.bottom, parentRect.bottom)
-          if (childRect.top >= parentRect.top && childRect.bottom <= parentRect.bottom + 50) {
-            // this.messages.last.nativeElement.scrollIntoView()
-            this.anchor.nativeElement.scrollIntoView()
+    setTimeout(() => {
+      if (this.newMessageSubscription !== undefined) return
+      this.newMessageSubscription = this.messages.changes.subscribe(() => {
+        if (this.previousSelectedChat !== this.chatService.selected()) {
+          this.previousSelectedChat = this.chatService.selected()
+          this.anchor.nativeElement.scrollIntoView()
+        }
+        else if (this.messages.last && this.messages.last.nativeElement && this.messages.length >= 2) {
+          const prev = this.messages.get(this.messages.length - 2)
+          if (prev && prev.nativeElement) {
+            const parentRect = this.wrapper.nativeElement.getBoundingClientRect();
+            const childRect = prev.nativeElement.getBoundingClientRect();
+            // console.log(childRect.top, parentRect.top, childRect.bottom, parentRect.bottom)
+            if (childRect.top >= parentRect.top && childRect.bottom <= parentRect.bottom + 50) {
+              // this.messages.last.nativeElement.scrollIntoView()
+              this.anchor.nativeElement.scrollIntoView()
+            }
           }
         }
-      }
-    })
+      })
+    }, 1000)
+    setTimeout(() => this.anchor.nativeElement.scrollIntoView(), 0)
   }
 
   text: string = ""

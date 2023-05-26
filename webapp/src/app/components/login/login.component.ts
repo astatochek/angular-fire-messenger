@@ -1,17 +1,10 @@
-import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
-import * as _ from 'lodash';
+import {Component, inject, signal} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
 
 interface IForm {
   username: string
   password: string
-}
-
-interface IWarning {
-  usernameWarning: string
-  passwordWarning: string
-  requestWarning: string
 }
 
 @Component({
@@ -59,6 +52,12 @@ export class LoginComponent{
     }
     this.userService.loginWarning.update(() => "")
     this.userService.logIn(this.form().username, this.form().password)
+  }
+
+  clickEnter(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      this.clickLogin()
+    }
   }
 
   clickClose() {

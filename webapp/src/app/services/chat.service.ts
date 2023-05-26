@@ -1,15 +1,18 @@
-import {computed, effect, inject, Injectable, signal} from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import * as _ from "lodash";
 import IChat from "../models/chat";
 import IUser from "../models/user";
 import IMessage from "../models/message";
 import {users} from "../dummies/user.dummies";
 import {generateSampleMessages} from "../dummies/message.dummies";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
+  router = inject(Router)
+
   chats = signal<IChat[]>([])
   selected = signal<number | undefined>(undefined)
   interlocutor = computed(() => {
@@ -27,6 +30,7 @@ export class ChatService {
     this.user = user
     if (this.chats().length === 0 && this.user.username !== '') {
       this.generateChatsWithMessages()
+      this.selected.set(this.chats().length > 0 ? this.chats()[0].id : undefined)
       console.log("Initialization Proceeded")
     } else {
       console.log("Initialization Rejected")
@@ -62,7 +66,7 @@ export class ChatService {
   constructor() {
     setInterval(() => {
       this.chats.mutate(next => {
-        const selectedId = this.selected()
+        const selectedId = _.sample(this.chats())?.id
         if (selectedId !== undefined) {
           const chatIdx = next.map(chat => chat.id).indexOf(selectedId)
           next[chatIdx]
@@ -70,7 +74,7 @@ export class ChatService {
             .push(generateSampleMessages(next[chatIdx].id, next[chatIdx].interlocutor, this.user, 1)[0])
         }
       })
-    }, 2000)
+    }, 500)
   }
 
   selectChat(id: number) {
