@@ -25,36 +25,31 @@
 <!--      </button>-->
     </div>
     <div class="min-h-fit w-full mt-2 bg-dark-purple rounded-xl border-2 border-white-40 flex flex-col justify-start items-center">
-      <table class="w-full">
-        <thead class="h-16">
-          <tr class="text-left bg-opacity-10 bg-black h-12 text-base">
-            <th class="rounded-tl-xl" [ngClass]="users().length === 0 ? 'rounded-bl-xl' : ''">
-              <div class="flex justify-center items-center py-2 px-2">
-                <div class="h-12 w-12"></div>
-              </div>
-            </th>
-            <th class="w-56">Username</th>
-            <th class="w-32">First Name</th>
-            <th class="w-32">Last Name</th>
-            <th class="rounded-tr-xl w-24" [ngClass]="users().length === 0 ? 'rounded-br-xl' : ''">Link</th>
+      <table class="w-full table-fixed">
+        <thead class="h-20 text-left">
+          <tr>
+            <th class="rounded-tl-xl" [ngClass]="users().length === 0 ? 'rounded-bl-xl' : ''"></th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th class="rounded-tr-xl w-[5rem]" [ngClass]="users().length === 0 ? 'rounded-br-xl' : ''"></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let user of users(); index as index;"
-              class="h-12 bg-opacity-10 font-normal text-sm hover:bg-white-10 transition ease-in-out duration-300"
+              class="bg-opacity-10 font-normal text-sm hover:bg-white-10 transition ease-in-out duration-300"
               [ngClass]="index % 2 === 1 ? 'bg-black' : 'bg-transparent'"
           >
             <td [ngClass]="index === users().length - 1 ? 'rounded-bl-xl' : ''">
-              <div class="flex justify-center items-center py-2 px-2">
+              <div class="h-20 w-20 flex items-center justify-center p-4">
                 <app-avatar
                   [username]="user.username"
-                  [styles]="['h-full', 'rounded-lg']"
-                  class="h-12 w-12"
+                  [styles]="['h-full', 'rounded-lg', 'h-full']"
                 />
               </div>
             </td>
             <td class="select-all">
-              {{ user.username | truncate:20 }}
+              {{ user.username | truncate:12 }}
             </td>
             <td class="select-all">
               {{ user.firstName | truncate:12 }}
@@ -63,17 +58,18 @@
               {{ user.lastName | truncate:12 }}
             </td>
             <td [ngClass]="index === users().length - 1 ? 'rounded-br-xl' : ''">
-              <button
-                class="rounded px-2 py-1 transition ease-in-out duration-300 hover:text-green-600 hover:underline hover:font-medium"
-                (click)="goToChat(user)"
-              >
-                Chat
-              </button>
+              <div class="flex w-full h-full justify-center items-end">
+                <button
+                  class="rounded-lg px-2 py-1 border-spanish-viridian text-spanish-viridian font-bold border-2 transition ease-in-out duration-300 hover:bg-opacity-100 hover:text-white bg-spanish-viridian bg-opacity-5"
+                  (click)="goToChat(user)"
+                >
+                  ↩
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
-
     </div>
   </div>
 </main>

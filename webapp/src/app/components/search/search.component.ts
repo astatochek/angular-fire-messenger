@@ -36,4 +36,8 @@ export class SearchComponent {
     this.router.navigate(['chats']).then(r => console.log('Redirecting:', r))
   }
 
+  // chatWithUserExists(username: string) {
+  //   return this.chatService.chats().map(value => value.interlocutor.username).includes(username)
+  // }
+
 }

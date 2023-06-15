@@ -20,13 +20,13 @@ const AuthGuard = computed(() => {
   const router = inject(Router)
   if (!userService.isLoggedIn()) {
     console.error('Preventing navigation because user is NOT logged in')
-    router.navigate(['login']).then(() => {})
+    router.navigate(['login']).then(console.log)
   }
   return userService.isLoggedIn()
 })
 
 const routes: Routes = [
-  { path: '', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: '/profile', pathMatch: "full" },
   { path: 'login', component: LoginComponent, canActivate: [PreAuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [PreAuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
