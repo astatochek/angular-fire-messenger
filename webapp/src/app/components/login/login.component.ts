@@ -65,4 +65,8 @@ export class LoginComponent{
     this.userService.loginWarning.set("")
   }
 
+  navigateToRegister() {
+    this.router.navigate(['register']).then(console.log)
+  }
+
 }

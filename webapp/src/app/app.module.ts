@@ -16,6 +16,7 @@ import { SearchComponent } from './components/search/search.component';
 import { MenuItemComponent } from './components/chats/menu-item/menu-item.component';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { WarningComponent } from './components/warning/warning.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { WarningComponent } from './components/warning/warning.component';
     SearchComponent,
     MenuItemComponent,
     AvatarComponent,
-    WarningComponent
+    WarningComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

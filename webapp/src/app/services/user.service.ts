@@ -25,6 +25,7 @@ export class UserService {
   isLoggedIn = computed(() => this.token() !== "")
 
   public loginWarning = signal("")
+  public registerWarning = signal("")
   public sessionWarning = signal(false)
 
   constructor() {
