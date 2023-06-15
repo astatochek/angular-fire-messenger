@@ -85,7 +85,7 @@ export class RegisterComponent {
       return
     }
     this.userService.registerWarning.update(() => "")
-    console.log("REGISTRATION REQUEST")
+    this.userService.registerUser(this.form())
   }
 
   clickEnter(event: KeyboardEvent) {

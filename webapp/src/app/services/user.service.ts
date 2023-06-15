@@ -2,7 +2,8 @@ import {computed, effect, inject, Injectable, signal} from '@angular/core';
 import {CookieService} from 'ngx-cookie-service';
 import IUser from "../models/user";
 import {Router} from "@angular/router";
-import {env} from "../../environments/environment.keycloak";
+import {env as keycloak} from "../../environments/environment.keycloak";
+import {env as server} from "../../environments/environment.backend";
 import {ChatService} from "./chat.service";
 
 @Injectable({
@@ -46,7 +47,7 @@ export class UserService {
 
   logIn(username: string, password: string) {
     console.info("Making a LogIn Request")
-    fetch(`http://localhost:${env.port}/realms/${env.realm}/protocol/openid-connect/token`, {
+    fetch(`http://localhost:${keycloak.port}/realms/${keycloak.realm}/protocol/openid-connect/token`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -55,7 +56,7 @@ export class UserService {
       cache: "no-cache",
       body: new URLSearchParams({
         grant_type: 'password',
-        client_id: env.clientId,
+        client_id: keycloak.clientId,
         username: username,
         password: password
       })
@@ -66,7 +67,7 @@ export class UserService {
           this.loginWarning.set("Username or Password are Invalid")
         } else {
           this.changeToken(data.access_token)
-          this.router.navigate(["/profile"]).then(() => {})
+          this.router.navigate(["/profile"]).then(console.log)
         }
       })
       .catch(e => {
@@ -76,7 +77,7 @@ export class UserService {
   }
 
   getUserInfo(token: string) {
-    fetch(`http://localhost:${env.port}/realms/${env.realm}/protocol/openid-connect/userinfo`, {
+    fetch(`http://localhost:${keycloak.port}/realms/${keycloak.realm}/protocol/openid-connect/userinfo`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Origin': 'http://localhost:4200',
@@ -101,6 +102,67 @@ export class UserService {
         console.error(error)
         this.changeToken("")
       });
+  }
+
+  registerUser(user: {
+    username: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  }) {
+    fetch(`http://localhost:${server.port}/api/create`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...user,
+        email: "some@mail.cum"
+      })
+    }).then(res => {
+      switch (res.status) {
+        case 201:
+          this.router.navigate(['login']).then(console.log);
+          break;
+        case 409:
+          this.registerWarning.set("User already exists")
+          break
+        default:
+          this.registerWarning.set("Something went Wrong")
+      }
+    })
+    .catch(console.log);
+  }
+
+  changeUserInfo(info: {
+    firstName: string,
+    lastName: string,
+    password: string
+  }){
+    fetch(`http://localhost:${server.port}/api/update`, {
+      method: "POST",
+
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.#token()}`
+      },
+      body: JSON.stringify({
+        ...info
+      })
+    }).then(res => {
+      switch (res.status) {
+        case 204:
+          this.user.update(prev => {
+            return {
+              ...prev,
+              firstName: info.firstName === "" ? prev.firstName : info.firstName,
+              lastName: info.lastName === "" ? prev.lastName : info.lastName,
+            }
+          })
+      }
+    })
+      .catch(console.log)
+
   }
 
   changeToken(token: string, raiseSessionExpiredMessageIfNeeded = true) {
