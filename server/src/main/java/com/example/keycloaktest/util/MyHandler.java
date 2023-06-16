@@ -1,5 +1,7 @@
 package com.example.keycloaktest.util;
 
+import ch.qos.logback.core.joran.ParamModelHandler;
+import ch.qos.logback.core.joran.sanity.Pair;
 import com.google.gson.Gson;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -9,10 +11,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -23,7 +22,7 @@ public class MyHandler extends TextWebSocketHandler {
 
 
 
-    private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private List<HashMap<String,WebSocketSession>> sessions = new CopyOnWriteArrayList<>();
 
 
 
@@ -34,8 +33,8 @@ public class MyHandler extends TextWebSocketHandler {
 
         Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
         super.handleTextMessage(session,message);
-        for (WebSocketSession webSocketSession: sessions){
-            webSocketSession.sendMessage(message);//chatId content sender
+        for (HashMap<String, WebSocketSession> webSocketSession: sessions){
+            webSocketSession.get("test").sendMessage(message);//chatId content sender
         }
 
     }
@@ -44,14 +43,18 @@ public class MyHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
-        sessions.add(session);
+        HashMap<String, WebSocketSession> map = new HashMap<>();
+        map.put("test", session);
+        sessions.add(map);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status)
             throws Exception{
         super.afterConnectionClosed(session, status);
-        sessions.remove(session);
+        HashMap<String, WebSocketSession> map = new HashMap<>();
+        map.put("test", session);
+        sessions.remove(map);
     }
 
 
