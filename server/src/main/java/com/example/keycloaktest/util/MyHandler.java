@@ -13,59 +13,49 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 @Component
 @NoArgsConstructor
 public class MyHandler extends TextWebSocketHandler {
 
-    private List<Map.Entry<String, WebSocketSession>> sessions = new ArrayList<>();
+
+
+
+    private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+
+
+
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws InterruptedException, IOException, Exception {
 
-        super.handleTextMessage(session, message);
         Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
-
-        System.out.println("received");
-
-        if (value.get("username") != null) {
-            String username = value.get("username");
-            Map.Entry<String, WebSocketSession> pair = new AbstractMap.SimpleEntry<>(username,
-                    session);
-
-            sessions.add(pair);
-        } else {
-            String sender = value.get("sender");
-            String receiver = value.get("receiver");
-
-            for (Map.Entry<String, WebSocketSession> pair : sessions) {
-                if (pair.getKey() == sender || pair.getKey() == receiver) {
-                    pair.getValue().sendMessage(message);
-                }
-                pair.getValue().sendMessage(message);
-            }
-
+        super.handleTextMessage(session,message);
+        for (WebSocketSession webSocketSession: sessions){
+            webSocketSession.sendMessage(message);//chatId content sender
         }
+
     }
 
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
+        sessions.add(session);
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status)
+            throws Exception{
         super.afterConnectionClosed(session, status);
-        for (Map.Entry<String, WebSocketSession> pair : sessions) {
-            if (pair.getValue() == session) {
-                sessions.remove(pair);
-                break;
-            }
-        }
+        sessions.remove(session);
     }
 
-}
 
+
+
+
+}
