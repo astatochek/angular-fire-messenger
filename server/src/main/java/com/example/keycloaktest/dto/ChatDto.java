@@ -15,5 +15,5 @@ import java.util.ArrayList;
 public class ChatDto {
 
     private Long chatId;
-    private String[] participants;
+    private UserInfoDto[] participants;
 }

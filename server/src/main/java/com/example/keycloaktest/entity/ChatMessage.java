@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.Date;
+
 @Data
 @Entity
 @Getter
@@ -23,11 +25,13 @@ public class ChatMessage {
     private String receiver;
 
     private Long chatId;
+    private Date date;
 
     public ChatMessage(String text, String sender, String receiver, Long chatId) {
         this.text = text;
         this.sender = sender;
         this.receiver = receiver;
         this.chatId = chatId;
+        this.date =new Date();
     }
 }

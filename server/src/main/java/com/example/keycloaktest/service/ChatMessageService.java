@@ -45,7 +45,7 @@ public class ChatMessageService {
 
     public ResponseEntity  proccessMessage(MessageDto messageDto){
 
-        String senderUsername = messageDto.getSender();
+        String senderUsername = messageDto.getSender().getUsername();
         String fParticipant = chatRepository.findById(messageDto.getChatId()).get().getFParticipant();
         String sParticipant = chatRepository.findById(messageDto.getChatId()).get().getSParticipant();
         String receiverUsername;
@@ -65,7 +65,7 @@ public class ChatMessageService {
 
     public void save(MessageDto messageDto){
         Long chatId = messageDto.getChatId();
-        String sender = messageDto.getSender();
+        String sender = messageDto.getSender().getUsername();
         Chat chat = chatRepository.findById(messageDto.getChatId()).get();
         String receiver;
         if (chat.getSParticipant() == sender){

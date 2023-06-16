@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,6 +15,8 @@ import lombok.Setter;
 public class MessageDto {
 
     private Long chatId;
-    private String sender;
+    private UserInfoDto sender;
     private String content;
+    private Long messageId;
+    private Date date;
 }

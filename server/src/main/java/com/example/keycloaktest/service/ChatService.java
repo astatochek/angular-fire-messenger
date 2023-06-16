@@ -2,6 +2,7 @@ package com.example.keycloaktest.service;
 
 import com.example.keycloaktest.dto.ChatDto;
 import com.example.keycloaktest.dto.MessageDto;
+import com.example.keycloaktest.dto.UserInfoDto;
 import com.example.keycloaktest.entity.Chat;
 import com.example.keycloaktest.entity.ChatMessage;
 import com.example.keycloaktest.repository.ChatMessageRepository;
@@ -69,7 +70,8 @@ public class ChatService {
         List<Object> tmp2 = new ArrayList<>();
         chats.forEach((chat)->{
             ChatDto dto = new ChatDto(chat.getId()
-                    ,new String[]{chat.getFParticipant(), chat.getSParticipant()});
+                    ,new UserInfoDto[]{new UserInfoDto(chat.getFParticipant(),"",""),
+            new UserInfoDto(chat.getSParticipant(),"","")});
             dtos.add(dto);
         });
 
@@ -82,8 +84,8 @@ public class ChatService {
         List<ChatMessage> messages = messageRepository.findByChatId(id);
         List<MessageDto> response = new ArrayList<>();
         messages.forEach((message) ->{
-            MessageDto dto = new MessageDto(message.getChatId(), message.getSender(),
-                    message.getText());
+            MessageDto dto = new MessageDto(message.getChatId(), new UserInfoDto(message.getSender(),"",""),
+                    message.getText(), message.getId(), message.getDate());
             response.add(dto);
         });
 
