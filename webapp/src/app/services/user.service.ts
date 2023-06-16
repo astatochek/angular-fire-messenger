@@ -29,6 +29,8 @@ export class UserService {
   public registerWarning = signal("")
   public sessionWarning = signal(false)
 
+  public queriedUsers = signal<IUser[]>([])
+
   constructor() {
     if (this.cookieService.check('token')) {
       console.log('Found Token in Cookies')
@@ -39,7 +41,7 @@ export class UserService {
 
     effect(() => {
       if (!this.isLoggedIn()) {
-        this.router.navigate(["/login"]).then(() => {})
+        this.router.navigate(["/login"]).then(console.log)
       }
     })
   }
@@ -95,7 +97,7 @@ export class UserService {
             lastName: data.family_name
           }
           this.user.set(next)
-          this.chatService.init(next)
+          this.chatService.init(next, this.token())
         }
       })
       .catch(error => {
@@ -159,10 +161,21 @@ export class UserService {
               lastName: info.lastName === "" ? prev.lastName : info.lastName,
             }
           })
+          break;
+        case 401:
+          this.changeToken("")
       }
     })
       .catch(console.log)
 
+  }
+
+  searchUsers(query: string) {
+    fetch(`http://localhost:${server.port}/api/users?` + new URLSearchParams({
+      username: query
+    }))
+      .then(res => res.json())
+      .then((data: IUser[]) => this.queriedUsers.set(data.filter(user => user.username !== this.user().username)))
   }
 
   changeToken(token: string, raiseSessionExpiredMessageIfNeeded = true) {
