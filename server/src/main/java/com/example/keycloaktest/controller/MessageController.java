@@ -3,6 +3,7 @@ package com.example.keycloaktest.controller;
 
 import com.example.keycloaktest.dto.IdDto;
 import com.example.keycloaktest.dto.MessageDto;
+import com.example.keycloaktest.dto.SendDto;
 import com.example.keycloaktest.dto.UsernameDto;
 import com.example.keycloaktest.service.ChatMessageService;
 import com.example.keycloaktest.service.ChatService;
@@ -53,8 +54,9 @@ public class MessageController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity processMessage(@RequestBody MessageDto messageDto){
-        messageService.save(messageDto);
+    public ResponseEntity processMessage(@RequestBody SendDto sendDto){
+
+        messageService.save(sendDto);
         return ResponseEntity.ok().build();
     }
 

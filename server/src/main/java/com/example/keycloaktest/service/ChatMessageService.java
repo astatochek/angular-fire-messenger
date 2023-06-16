@@ -1,6 +1,7 @@
 package com.example.keycloaktest.service;
 
 import com.example.keycloaktest.dto.MessageDto;
+import com.example.keycloaktest.dto.SendDto;
 import com.example.keycloaktest.entity.Chat;
 import com.example.keycloaktest.entity.ChatMessage;
 import com.example.keycloaktest.repository.ChatMessageRepository;
@@ -63,9 +64,9 @@ public class ChatMessageService {
         return responseEntity;
     }
 
-    public void save(MessageDto messageDto){
+    public void save(SendDto messageDto){
         Long chatId = messageDto.getChatId();
-        String sender = messageDto.getSender().getUsername();
+        String sender = messageDto.getSender();
         Chat chat = chatRepository.findById(messageDto.getChatId()).get();
         String receiver;
         if (chat.getSParticipant() == sender){
