@@ -16,7 +16,5 @@ export class NavbarComponent {
   isLoggedIn = computed(() => this.userService.isLoggedIn())
   username = computed(() => this.userService.user().username)
   interlocutor = computed(() => this.chatService.interlocutor())
-  navigate(url: string): void {
-    this.router.navigate([url]).then(r => console.log('Navigate Response:', r))
-  }
+
 }

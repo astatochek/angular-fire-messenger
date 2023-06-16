@@ -26,12 +26,13 @@ const AuthGuard = computed(() => {
 })
 
 const routes: Routes = [
-  { path: '', redirectTo: '/profile', pathMatch: "full" },
+  { path: '', redirectTo: '/profile', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [PreAuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [PreAuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'chats', component: ChatsComponent, canActivate: [AuthGuard] },
-  { path: 'search', component: SearchComponent, canActivate: [AuthGuard] }
+  { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '/profile' },
 ];
 
 @NgModule({
