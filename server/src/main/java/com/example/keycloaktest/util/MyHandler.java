@@ -28,6 +28,7 @@ public class MyHandler extends TextWebSocketHandler {
         super.handleTextMessage(session, message);
         Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
 
+        System.out.println("received");
 
         if (value.get("username") != null) {
             String username = value.get("username");
@@ -37,11 +38,13 @@ public class MyHandler extends TextWebSocketHandler {
             sessions.add(pair);
         } else {
             String sender = value.get("sender");
+            String receiver = value.get("receiver");
 
             for (Map.Entry<String, WebSocketSession> pair : sessions) {
-                if (pair.getKey() == sender) {
+                if (pair.getKey() == sender || pair.getKey() == receiver) {
                     pair.getValue().sendMessage(message);
                 }
+                pair.getValue().sendMessage(message);
             }
 
         }
