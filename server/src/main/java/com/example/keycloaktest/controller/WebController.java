@@ -2,6 +2,7 @@ package com.example.keycloaktest.controller;
 
 
 import com.example.keycloaktest.dto.UserDto;
+import com.example.keycloaktest.dto.UserInfoDto;
 import com.example.keycloaktest.service.KeycloakService;
 import com.example.keycloaktest.util.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api")
 public class WebController {
 
@@ -37,12 +40,15 @@ public class WebController {
     public ResponseEntity addUser(@RequestBody UserDto userDto) throws IOException, InterruptedException {
         int code = service.addUser(userDto);
         ResponseEntity responseEntity = ResponseEntity.status(code).build();
-        return responseEntity   ;
+        return responseEntity;
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<String>> getUsers() throws  IOException, InterruptedException{
-        ResponseEntity<List<String>> response = service.getUsers();
+    public ResponseEntity<List<UserInfoDto>> getUsers(@QueryParam("username") String username) throws  IOException, InterruptedException{
+        if (username == null){
+            username = "";
+        }
+        ResponseEntity<List<UserInfoDto>> response = service.getUsers(username);
         return response;
     }
 

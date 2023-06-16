@@ -1,6 +1,7 @@
 package com.example.keycloaktest.service;
 
 import com.example.keycloaktest.dto.UserDto;
+import com.example.keycloaktest.dto.UserInfoDto;
 import com.example.keycloaktest.util.Credentials;
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import org.json.JSONArray;
@@ -83,17 +84,21 @@ public class KeycloakService {
         return response.statusCode();
     }
 
-    public ResponseEntity<List<String>> getUsers() throws IOException, InterruptedException{
+    public ResponseEntity<List<UserInfoDto>> getUsers(String username) throws IOException, InterruptedException{
         String token = getToken();
+        String query = "";
+        if (!username.isEmpty() && !username.isBlank()){
+            query+="/?username="+username;
+        }
         var client = HttpClient.newHttpClient();
         var request =  HttpRequest.newBuilder(
-                URI.create("http://localhost:8080/admin/realms/test/users")
+                URI.create("http://localhost:8080/admin/realms/test/users"+query)
         ).headers("Content-Type", "application/json")
                 .headers("Authorization", "Bearer "+token).GET().build();
 
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
         int code = response.statusCode();
-        List<String> users = new ArrayList<>();
+        List<UserInfoDto> users = new ArrayList<>();
         if (code==200) {
             //JSONObject object = new JSONObject(response.body());
             JSONArray array = new JSONArray(response.body());
@@ -101,15 +106,19 @@ public class KeycloakService {
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
+                UserInfoDto infoDto = new UserInfoDto();
                 //System.out.println(object.get("username").toString());
                 //System.out.println(object.get("username").equals("admin") );
                 if (!object.get("username").equals("admin")) {
-                    users.add(object.get("username").toString());
+                    infoDto.setUsername(object.get("username").toString());
+                    infoDto.setFirstName(object.get("firstName").toString());
+                    infoDto.setLastName(object.get("lastName").toString());
+                    users.add(infoDto);
                 }
 
             }
         }
-        ResponseEntity<List<String>> responseEntity = ResponseEntity.status(code).body(users);
+        ResponseEntity<List<UserInfoDto>> responseEntity = ResponseEntity.status(code).body(users);
         return  responseEntity;
     }
 
@@ -132,6 +141,16 @@ public class KeycloakService {
         JSONObject userInfo = getInfo(userToken);
         String token = getToken();
         String id = userInfo.get("sub").toString();
+        String username = userInfo.get("preferred_username").toString();
+        String fName = userInfo.get("given_name").toString();
+        String lName = userInfo.get("family_name").toString();
+
+        if (userDto.getFirstName().isBlank() || userDto.getFirstName().isEmpty()){
+            userDto.setFirstName(fName);
+        }
+        if (userDto.getLastName().isBlank() || userDto.getLastName().isEmpty()){
+            userDto.setLastName(lName);
+        }
 
         String body = getBody(userDto);
 
