@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.example.keycloaktest.util.UserList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class ChatService {
     @Autowired
     private ChatRepository chatRepository;
 
+    @Autowired
+    private KeycloakService keycloakService;
+
 
     @Autowired
     private ChatMessageRepository messageRepository;
@@ -32,21 +37,26 @@ public class ChatService {
     }
 
 
-    public Map<String, Object> addChat(ArrayList<String> users){
+    public ResponseEntity<Long> addChat(UserList userList){
+        List<String> users = userList.getUsers();
         String fPart = users.get(0);
         String sPart = users.get(1);
         Chat chat = chatRepository.findByFParticipantOrSParticipant(fPart, sPart);
         Map<String, Object> response= new HashMap<>();
         response.put("code", 0);
+        Long id;
         if (chat == null){
             Chat newChat = new Chat(fPart, sPart);
             chatRepository.save(newChat);
             response.put("chatId", newChat.getId());
+            id = newChat.getId();
         }
         else{
             response.put("chatId", chat.getId());
+            id = chat.getId();
         }
-        return response;
+        ResponseEntity responseEntity = ResponseEntity.ok(id);
+        return responseEntity;
 
     }
 
