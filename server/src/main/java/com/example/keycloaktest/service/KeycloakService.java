@@ -35,9 +35,13 @@ public class KeycloakService {
                 "\"lastName\":\""+userDto.getLastName()+"\","+
                 "\"enabled\":\"true\","+
                 "\"email\":\""+"test@mail.com"+"\","+
-                "\"username\":\""+userDto.getUsername()+"\","+
-                "\"credentials\":[{\"type\":\"password\",\"value\":\""+userDto.getPassword()+"\"," +
-                "\"temporary\": false}]}";
+                "\"username\":\""+userDto.getUsername()+"\"";
+                if(!userDto.getPassword().isEmpty() && !userDto.getPassword().isBlank()){
+                body+=",\"credentials\":[{\"type\":\"password\",\"value\":\""+userDto.getPassword()+"\"," +
+                "\"temporary\": false}]}";}
+                else{
+                    body += "}";
+                }
 
         return body;
     }
