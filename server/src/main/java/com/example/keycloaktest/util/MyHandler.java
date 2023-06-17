@@ -3,10 +3,14 @@ package com.example.keycloaktest.util;
 import ch.qos.logback.core.joran.ParamModelHandler;
 import com.example.keycloaktest.dto.MessageDto;
 import com.example.keycloaktest.dto.UserInfoDto;
+import com.example.keycloaktest.entity.Chat;
+import com.example.keycloaktest.repository.ChatRepository;
+import com.example.keycloaktest.service.ChatService;
 import com.google.gson.Gson;
 import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 import org.modelmapper.internal.util.CopyOnWriteLinkedHashMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -15,6 +19,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -22,6 +27,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 @NoArgsConstructor
 public class MyHandler extends TextWebSocketHandler {
+
+    @Autowired
+    ChatRepository chatRepository;
 
 
 
@@ -39,6 +47,7 @@ public class MyHandler extends TextWebSocketHandler {
 
 
 
+
         //Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
         JSONObject value = new JSONObject(message.getPayload());
         if (value.has("username")){
@@ -51,6 +60,9 @@ public class MyHandler extends TextWebSocketHandler {
 
         }
         else {
+            Chat chat = chatRepository.findById(Long.parseLong(value.getString("chatId"))).get();
+            String fPart = chat.getFParticipant();
+            String sPart = chat.getSParticipant();
             MessageDto messageDto = new MessageDto();
             messageDto.setMessageId(0L);
             messageDto.setDate(new Date());
@@ -63,6 +75,8 @@ public class MyHandler extends TextWebSocketHandler {
             messageDto.setSender(sender);
 
             JSONObject messageJson = new JSONObject(messageDto);
+            SimpleDateFormat formatter = new SimpleDateFormat("EE MMM d y H:m:s ZZZ");
+            messageJson.put("date", formatter.format(messageDto.getDate()));
             TextMessage textMessage = new TextMessage(messageJson.toString());
             //TextMessage textMessage = new TextMessage(messageDto.toString());
 
@@ -71,7 +85,7 @@ public class MyHandler extends TextWebSocketHandler {
             super.handleTextMessage(session, message);
 
             for (Pair<String, WebSocketSession> webSocketSession : sessions) {
-                if (messageJson.get("sender").equals(webSocketSession.getFirst())) {
+                if (messageJson.get("sender").equals(sPart) || messageJson.get("sender").equals(fPart)) {
                     webSocketSession.getSecond().sendMessage(textMessage);//chatId content sender
                 }
             }
