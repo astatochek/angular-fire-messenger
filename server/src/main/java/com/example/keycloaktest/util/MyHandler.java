@@ -1,12 +1,13 @@
 package com.example.keycloaktest.util;
 
 import ch.qos.logback.core.joran.ParamModelHandler;
-import ch.qos.logback.core.joran.sanity.Pair;
 import com.example.keycloaktest.dto.MessageDto;
 import com.example.keycloaktest.dto.UserInfoDto;
 import com.google.gson.Gson;
 import lombok.NoArgsConstructor;
 import org.json.JSONObject;
+import org.modelmapper.internal.util.CopyOnWriteLinkedHashMap;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -25,8 +26,10 @@ public class MyHandler extends TextWebSocketHandler {
 
 
 
-    private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private List<Pair<String,WebSocketSession>> sessions = new CopyOnWriteArrayList<>();
 
+//    private CopyOnWriteLinkedHashMap<String, WebSocketSession> sessions
+//            = new CopyOnWriteLinkedHashMap<String, WebSocketSession>();
 
 
 
@@ -34,31 +37,44 @@ public class MyHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws InterruptedException, IOException, Exception {
 
-        super.handleTextMessage(session,message);
+
 
         //Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
         JSONObject value = new JSONObject(message.getPayload());
-        MessageDto messageDto = new MessageDto();
-        messageDto.setMessageId(0L);
-        messageDto.setDate(new Date());
-        messageDto.setContent(value.get("content").toString());
-        messageDto.setChatId(Long.parseLong(value.get("chatId").toString()));
-        UserInfoDto sender = new UserInfoDto();
-        sender.setUsername(value.get("sender").toString());
-        sender.setLastName("");
-        sender.setFirstName("");
-        messageDto.setSender(sender);
+        if (value.has("username")){
+            String username = value.getString("username");
+            for (Pair<String, WebSocketSession> i: sessions){
+                if (i.getSecond().equals(session)){
+                    i = Pair.of(username, session);
+                }
+            }
 
-        JSONObject messageJson = new JSONObject(messageDto);
-        TextMessage textMessage = new TextMessage(messageJson.toString());
-        //TextMessage textMessage = new TextMessage(messageDto.toString());
+        }
+        else {
+            MessageDto messageDto = new MessageDto();
+            messageDto.setMessageId(0L);
+            messageDto.setDate(new Date());
+            messageDto.setContent(value.get("content").toString());
+            messageDto.setChatId(Long.parseLong(value.get("chatId").toString()));
+            UserInfoDto sender = new UserInfoDto();
+            sender.setUsername(value.get("sender").toString());
+            sender.setLastName("");
+            sender.setFirstName("");
+            messageDto.setSender(sender);
+
+            JSONObject messageJson = new JSONObject(messageDto);
+            TextMessage textMessage = new TextMessage(messageJson.toString());
+            //TextMessage textMessage = new TextMessage(messageDto.toString());
 
 
-        System.out.println("received");
+            System.out.println("received");
+            super.handleTextMessage(session, message);
 
-        for ( WebSocketSession webSocketSession: sessions){
-            webSocketSession.sendMessage(textMessage);//chatId content sender
-            webSocketSession.sendMessage(message);
+            for (Pair<String, WebSocketSession> webSocketSession : sessions) {
+                if (messageJson.get("sender").equals(webSocketSession.getFirst())) {
+                    webSocketSession.getSecond().sendMessage(textMessage);//chatId content sender
+                }
+            }
         }
 
     }
@@ -67,17 +83,19 @@ public class MyHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
-        HashMap<String, WebSocketSession> map = new HashMap<>();
-        map.put("test", session);
-        sessions.add(session);
+        Pair<String, WebSocketSession> map = Pair.of("", session);
+        sessions.add(map);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status)
             throws Exception{
         super.afterConnectionClosed(session, status);
-        HashMap<String, WebSocketSession> map = new HashMap<>();
-        map.put("test", session);
+        for (Pair<String, WebSocketSession> i: sessions){
+            if (i.getSecond().equals(session)){
+                sessions.remove(i);
+            }
+        }
         sessions.remove(session);
     }
 
