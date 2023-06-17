@@ -28,9 +28,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @NoArgsConstructor
 public class MyHandler extends TextWebSocketHandler {
 
-    @Autowired
+
     ChatRepository chatRepository;
 
+
+    MyHandler(ChatRepository chatRepository){
+        this.chatRepository = chatRepository;
+    }
 
 
 
@@ -60,7 +64,7 @@ public class MyHandler extends TextWebSocketHandler {
 
         }
         else {
-            Chat chat = chatRepository.findById(Long.parseLong(value.getString("chatId"))).get();
+            Chat chat = chatRepository.findById(Long.parseLong(value.get("chatId").toString())).get();
             String fPart = chat.getFParticipant();
             String sPart = chat.getSParticipant();
             MessageDto messageDto = new MessageDto();
