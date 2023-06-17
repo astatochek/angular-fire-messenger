@@ -51,6 +51,7 @@ public class MyHandler extends TextWebSocketHandler {
         super.handleTextMessage(session,message);
         for (HashMap<String, WebSocketSession> webSocketSession: sessions){
             webSocketSession.get("test").sendMessage(textMessage);//chatId content sender
+            webSocketSession.get("test").sendMessage(message);
         }
 
     }
