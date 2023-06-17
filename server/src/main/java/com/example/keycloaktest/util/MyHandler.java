@@ -25,7 +25,7 @@ public class MyHandler extends TextWebSocketHandler {
 
 
 
-    private List<HashMap<String,WebSocketSession>> sessions = new CopyOnWriteArrayList<>();
+    private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
 
 
@@ -49,9 +49,9 @@ public class MyHandler extends TextWebSocketHandler {
         TextMessage textMessage = new TextMessage(messageDto.toString());
 
         super.handleTextMessage(session,message);
-        for (HashMap<String, WebSocketSession> webSocketSession: sessions){
-            webSocketSession.get("test").sendMessage(textMessage);//chatId content sender
-            webSocketSession.get("test").sendMessage(message);
+        for ( WebSocketSession webSocketSession: sessions){
+            webSocketSession.sendMessage(textMessage);//chatId content sender
+            webSocketSession.sendMessage(message);
         }
 
     }
@@ -62,7 +62,7 @@ public class MyHandler extends TextWebSocketHandler {
         super.afterConnectionEstablished(session);
         HashMap<String, WebSocketSession> map = new HashMap<>();
         map.put("test", session);
-        sessions.add(map);
+        sessions.add(session);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class MyHandler extends TextWebSocketHandler {
         super.afterConnectionClosed(session, status);
         HashMap<String, WebSocketSession> map = new HashMap<>();
         map.put("test", session);
-        sessions.remove(map);
+        sessions.remove(session);
     }
 
 
