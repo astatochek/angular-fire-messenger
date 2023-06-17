@@ -98,6 +98,7 @@ export class UserService {
           }
           this.user.set(next)
           this.chatService.init(next, this.token())
+          this.searchUsers("");
         }
       })
       .catch(error => {
@@ -112,10 +113,11 @@ export class UserService {
     firstName: string;
     lastName: string;
   }) {
-    fetch(`http://localhost:${server.port}/api/create`, {
+    fetch(`http://localhost:${server.port}/create`, {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer hui'
       },
       body: JSON.stringify({
         ...user,
@@ -173,9 +175,21 @@ export class UserService {
   searchUsers(query: string) {
     fetch(`http://localhost:${server.port}/api/users?` + new URLSearchParams({
       username: query
-    }))
-      .then(res => res.json())
+    }), {
+      method: "GET",
+      headers: {
+        'Authorization': `Bearer ${this.#token()}`
+      },
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        }
+        this.changeToken("")
+        return
+      })
       .then((data: IUser[]) => this.queriedUsers.set(data.filter(user => user.username !== this.user().username)))
+      .catch(() => this.changeToken(""))
   }
 
   changeToken(token: string, raiseSessionExpiredMessageIfNeeded = true) {

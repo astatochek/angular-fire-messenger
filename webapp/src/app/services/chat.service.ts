@@ -7,6 +7,10 @@ import IMessage from "../models/message";
 import {Router} from "@angular/router";
 import {env as server} from "../../environments/environment.backend";
 
+interface IWebSocketMessage extends Omit<IMessage, 'date'> {
+  date: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,7 +39,20 @@ export class ChatService {
         this.selected.set(this.chats().length > 0 ? this.chats()[0].id : undefined)
         this.webSocket = webSocket(`ws://localhost:${server.port}/ws`)
         this.webSocket.next({ username: user.username })
-        this.webSocket.asObservable().subscribe(data => console.log('Message from WebSocket:', data))
+        this.webSocket.asObservable().subscribe((msg: IWebSocketMessage) => {
+          const message: IMessage = { ...msg, date: new Date(msg.date) }
+          const allChatIDs = this.chats().map(chat => chat.id)
+          if (allChatIDs.includes(message.chatId)) {
+            this.chats.mutate(prev => prev[allChatIDs.indexOf(message.chatId)]
+              .messages.push(message))
+          } else {
+            this.chats.mutate(prev => prev.push({
+              id: message.chatId,
+              interlocutor: message.sender,
+              messages: [message]
+            }))
+          }
+        })
       })
       console.log("Initialization Proceeded")
     } else {
@@ -109,10 +126,11 @@ export class ChatService {
       })
     })
       .then(console.log)
-    // this.webSocket?.next({
-    //   sender: this.user.username,
-    //   chatId: this.selected()
-    // })
+    this.webSocket?.next({
+      sender: this.user.username,
+      chatId: this.selected(),
+      content: text
+    })
   }
 
   async addChatWith(interlocutor: IUser) {
