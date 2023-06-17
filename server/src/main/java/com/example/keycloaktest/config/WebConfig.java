@@ -31,13 +31,15 @@ public class WebConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
-        http.csrf().disable();
+       http.csrf().disable();
         http.cors().disable();
         http.authorizeHttpRequests(authorize->
                         authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/create").permitAll()
-                                .requestMatchers("/create").permitAll()
-                        .requestMatchers("/api/**").authenticated())
+                                
+                        .requestMatchers("/api/**").authenticated()
+                                .requestMatchers("/**").permitAll()
+                )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
     }
