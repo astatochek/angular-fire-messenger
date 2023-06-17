@@ -37,7 +37,7 @@ public class MyHandler extends TextWebSocketHandler {
         super.handleTextMessage(session,message);
 
         //Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
-        JSONObject value = new JSONObject(message);
+        JSONObject value = new JSONObject(message.getPayload());
         MessageDto messageDto = new MessageDto();
         messageDto.setMessageId(0L);
         messageDto.setDate(new Date());
@@ -48,7 +48,10 @@ public class MyHandler extends TextWebSocketHandler {
         sender.setLastName("");
         sender.setFirstName("");
         messageDto.setSender(sender);
-        TextMessage textMessage = new TextMessage(messageDto.toString());
+
+        JSONObject messageJson = new JSONObject(messageDto);
+        TextMessage textMessage = new TextMessage(messageJson.toString());
+        //TextMessage textMessage = new TextMessage(messageDto.toString());
 
 
         System.out.println("received");
