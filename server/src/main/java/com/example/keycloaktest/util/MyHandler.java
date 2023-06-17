@@ -13,6 +13,7 @@ import org.modelmapper.internal.util.CopyOnWriteLinkedHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -62,7 +63,8 @@ public class MyHandler extends TextWebSocketHandler {
 
         }
         else {
-            Chat chat = this.chatRepository.findById(Long.parseLong(value.get("chatId").toString())).get();
+            Chat chat = chatRepository.findById(Long.parseLong(value.get("chatId").toString())).get();
+
             String fPart = chat.getFParticipant();
             String sPart = chat.getSParticipant();
             MessageDto messageDto = new MessageDto();
