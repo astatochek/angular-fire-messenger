@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.ws.rs.HttpMethod;
+
 @Configuration
 @EnableWebSecurity
 public class WebConfig {
@@ -15,7 +17,9 @@ public class WebConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http.csrf().disable().cors().disable();
-        http.authorizeRequests(authorize->  authorize.requestMatchers("/create").permitAll()
+        http.authorizeRequests(authorize->
+                        authorize.requestMatchers("/create").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
