@@ -14,7 +14,7 @@ public class WebConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
-        http.csrf().disable();
+        http.csrf().disable().cors().disable();
         http.authorizeRequests(authorize->  authorize.requestMatchers("/create").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
