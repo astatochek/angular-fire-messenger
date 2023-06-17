@@ -2,8 +2,11 @@ package com.example.keycloaktest.util;
 
 import ch.qos.logback.core.joran.ParamModelHandler;
 import ch.qos.logback.core.joran.sanity.Pair;
+import com.example.keycloaktest.dto.MessageDto;
+import com.example.keycloaktest.dto.UserInfoDto;
 import com.google.gson.Gson;
 import lombok.NoArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -31,10 +34,23 @@ public class MyHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws InterruptedException, IOException, Exception {
 
-        Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
+        //Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
+        JSONObject value = new JSONObject(message);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setMessageId(0L);
+        messageDto.setDate(new Date());
+        messageDto.setContent(value.get("content").toString());
+        messageDto.setChatId(Long.parseLong(value.get("chatId").toString()));
+        UserInfoDto sender = new UserInfoDto();
+        sender.setUsername(value.get("sender").toString());
+        sender.setLastName("");
+        sender.setFirstName("");
+        messageDto.setSender(sender);
+        TextMessage textMessage = new TextMessage(messageDto.toString());
+
         super.handleTextMessage(session,message);
         for (HashMap<String, WebSocketSession> webSocketSession: sessions){
-            webSocketSession.get("test").sendMessage(message);//chatId content sender
+            webSocketSession.get("test").sendMessage(textMessage);//chatId content sender
         }
 
     }
