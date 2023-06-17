@@ -18,8 +18,8 @@ public class WebConfig {
 
         http.csrf().disable().cors().disable();
         http.authorizeRequests(authorize->
-                        authorize.requestMatchers("/create").permitAll()
-                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers("/create").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
