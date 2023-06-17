@@ -34,6 +34,8 @@ public class MyHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message)
             throws InterruptedException, IOException, Exception {
 
+        super.handleTextMessage(session,message);
+
         //Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
         JSONObject value = new JSONObject(message);
         MessageDto messageDto = new MessageDto();
@@ -48,7 +50,9 @@ public class MyHandler extends TextWebSocketHandler {
         messageDto.setSender(sender);
         TextMessage textMessage = new TextMessage(messageDto.toString());
 
-        super.handleTextMessage(session,message);
+
+        System.out.println("received");
+
         for ( WebSocketSession webSocketSession: sessions){
             webSocketSession.sendMessage(textMessage);//chatId content sender
             webSocketSession.sendMessage(message);
