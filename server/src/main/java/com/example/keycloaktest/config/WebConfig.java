@@ -32,7 +32,7 @@ public class WebConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http.csrf().disable();
-        http.cors(Customizer.withDefaults());
+        http.cors().disable();
         http.authorizeHttpRequests(authorize->
                         authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/create").permitAll()
