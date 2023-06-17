@@ -29,12 +29,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class MyHandler extends TextWebSocketHandler {
 
 
+    @Autowired
     ChatRepository chatRepository;
 
 
-    MyHandler(ChatRepository chatRepository){
-        this.chatRepository = chatRepository;
-    }
 
 
 
@@ -64,7 +62,7 @@ public class MyHandler extends TextWebSocketHandler {
 
         }
         else {
-            Chat chat = chatRepository.findById(Long.parseLong(value.get("chatId").toString())).get();
+            Chat chat = this.chatRepository.findById(Long.parseLong(value.get("chatId").toString())).get();
             String fPart = chat.getFParticipant();
             String sPart = chat.getSParticipant();
             MessageDto messageDto = new MessageDto();
@@ -83,6 +81,7 @@ public class MyHandler extends TextWebSocketHandler {
             messageJson.put("date", formatter.format(messageDto.getDate()));
             TextMessage textMessage = new TextMessage(messageJson.toString());
             //TextMessage textMessage = new TextMessage(messageDto.toString());
+
 
 
             System.out.println("received");
