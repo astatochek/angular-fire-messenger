@@ -26,13 +26,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 @Component
-@NoArgsConstructor
 public class MyHandler extends TextWebSocketHandler {
 
+    private final ChatRepository chatRepository;
 
-    @Autowired
-    ChatRepository chatRepository;
-
+    public MyHandler(final ChatRepository chatRepository){
+        this.chatRepository = chatRepository;
+    }
 
 
 
