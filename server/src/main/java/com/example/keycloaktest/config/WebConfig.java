@@ -2,6 +2,7 @@ package com.example.keycloaktest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
@@ -31,7 +32,7 @@ public class WebConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http.csrf().disable();
-        http.cors();
+        http.cors(Customizer.withDefaults());
         http.authorizeHttpRequests(authorize->
                         authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/create").permitAll()
