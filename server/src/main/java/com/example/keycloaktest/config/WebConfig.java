@@ -15,8 +15,8 @@ public class WebConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http.csrf().disable();
-        http.authorizeRequests(authorize->  authorize.requestMatchers("/**").permitAll()
-                        .requestMatchers("/api/me").authenticated())
+        http.authorizeRequests(authorize->  authorize.requestMatchers("/create").permitAll()
+                        .requestMatchers("/api/**").authenticated())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
         return http.build();
