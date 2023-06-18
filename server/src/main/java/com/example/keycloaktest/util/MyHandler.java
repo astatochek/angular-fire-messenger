@@ -7,6 +7,7 @@ import com.example.keycloaktest.entity.Chat;
 import com.example.keycloaktest.repository.ChatRepository;
 import com.example.keycloaktest.service.ChatService;
 import com.google.gson.Gson;
+import com.sun.mail.imap.protocol.INTERNALDATE;
 import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 import org.modelmapper.internal.util.CopyOnWriteLinkedHashMap;
@@ -54,11 +55,15 @@ public class MyHandler extends TextWebSocketHandler {
         //Map<String, String> value = new Gson().fromJson(message.getPayload(), Map.class);
         JSONObject value = new JSONObject(message.getPayload());
         if (value.has("username")){
+            Integer index = 0;
             String username = value.getString("username");
             for (Pair<String, WebSocketSession> i: sessions){
                 if (i.getSecond().equals(session)){
+
                     i = Pair.of(username, session);
+                    sessions.set(index, i);
                 }
+                index++;
             }
 
         }
@@ -89,7 +94,13 @@ public class MyHandler extends TextWebSocketHandler {
             System.out.println("received");
             super.handleTextMessage(session, message);
 
+
+
             for (Pair<String, WebSocketSession> webSocketSession : sessions) {
+
+                System.out.println(sPart);
+                System.out.println(fPart);
+                System.out.println(webSocketSession.getFirst());
                 if (webSocketSession.getFirst().equals(sPart) || webSocketSession.getFirst().equals(fPart)) {
                     webSocketSession.getSecond().sendMessage(textMessage);//chatId content sender
                 }
