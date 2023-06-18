@@ -20,7 +20,7 @@ public class SignUpController {
 
 
 
-    @PostMapping("/create")
+    @PostMapping("/users/create")
     public ResponseEntity addUser(@RequestBody UserDto userDto) throws IOException, InterruptedException {
         int code = service.addUser(userDto);
         ResponseEntity responseEntity = ResponseEntity.status(code).build();

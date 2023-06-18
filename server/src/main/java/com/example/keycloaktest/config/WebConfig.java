@@ -32,13 +32,10 @@ public class WebConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
        http.csrf().disable();
-        http.cors().disable();
+        http.cors(Customizer.withDefaults());
         http.authorizeHttpRequests(authorize->
-                        authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers(HttpMethod.OPTIONS, "/create").permitAll()
-                                
+                        authorize.requestMatchers("/users/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
-                                .requestMatchers("/**").permitAll()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
