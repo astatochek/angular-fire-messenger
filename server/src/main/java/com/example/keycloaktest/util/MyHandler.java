@@ -90,7 +90,7 @@ public class MyHandler extends TextWebSocketHandler {
             super.handleTextMessage(session, message);
 
             for (Pair<String, WebSocketSession> webSocketSession : sessions) {
-                if (value.get("sender").equals(sPart) || value.get("sender").equals(fPart)) {
+                if (webSocketSession.getFirst().equals(sPart) || webSocketSession.getFirst().equals(fPart)) {
                     webSocketSession.getSecond().sendMessage(textMessage);//chatId content sender
                 }
             }

@@ -34,8 +34,12 @@ public class WebConfig {
        http.csrf().disable();
         http.cors(Customizer.withDefaults());
         http.authorizeHttpRequests(authorize->
-                        authorize.requestMatchers("/users/**").permitAll()
+                        authorize.requestMatchers("/create").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/create").permitAll()
+
                         .requestMatchers("/api/**").authenticated()
+
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
