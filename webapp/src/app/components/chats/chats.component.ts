@@ -8,13 +8,8 @@ import {
   ViewChildren
 } from '@angular/core';
 import {ChatService} from "../../services/chat.service";
-import {generateSampleMessages} from "../../dummies/message.dummies";
 import {UserService} from "../../services/user.service";
-
-const delay = (time: number) => {
-  return new Promise(resolve => setTimeout(resolve, time));
-}
-
+import {Subscription} from "rxjs";
 @Component({
   selector: 'app-chats',
   templateUrl: './chats.component.html',
@@ -30,6 +25,8 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   })
   userService = inject(UserService)
 
+  newMessageSubscription: Subscription
+
   previousSelectedChat: number | undefined = undefined
 
   ngOnInit() {
@@ -37,8 +34,11 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.chatService.selected.set(undefined)
+    if (this.newMessageSubscription !== undefined) {
+      this.newMessageSubscription.unsubscribe()
+    }
   }
+
 
   @ViewChildren('messages') messages: QueryList<ElementRef>
   @ViewChild('wrapper') wrapper: ElementRef
@@ -48,8 +48,11 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     const selectedMenuItem = document.getElementById(`${this.chatService.selected()}`)
     if (selectedMenuItem) selectedMenuItem.scrollIntoView({ behavior: "smooth" })
-    this.anchor.nativeElement.scrollIntoView()
-    this.messages.changes.subscribe(() => {
+    // setTimeout(() => {
+    //
+    // }, 0)
+    if (this.newMessageSubscription !== undefined) return
+    this.newMessageSubscription = this.messages.changes.subscribe(() => {
       if (this.previousSelectedChat !== this.chatService.selected()) {
         this.previousSelectedChat = this.chatService.selected()
         this.anchor.nativeElement.scrollIntoView()
@@ -67,6 +70,7 @@ export class ChatsComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     })
+    setTimeout(() => this.anchor.nativeElement.scrollIntoView(), 0)
   }
 
   text: string = ""

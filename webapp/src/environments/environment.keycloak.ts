@@ -1,5 +1,5 @@
 export const env = {
-  realm: "realm",
+  realm: "test",
   clientId: "client",
   port: "8080"
 }

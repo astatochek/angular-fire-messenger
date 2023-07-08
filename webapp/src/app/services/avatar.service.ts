@@ -11,7 +11,12 @@ export class AvatarService {
   async set(username: string) {
     if (!this.repo.has(username) || this.repo.get(username) === undefined) {
       this.repo.set(username, undefined)
-      const image = await fetch(`${env.port}/${username}`)
+      const image = await fetch(`http://localhost:${env.port}/${username}`, {
+        mode: "cors",
+        headers: {
+          'Origin': 'http://localhost:4200',
+        }
+      })
       const blob = await image.blob()
       this.repo.set(username, URL.createObjectURL(blob))
     }

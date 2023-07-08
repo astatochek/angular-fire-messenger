@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -15,6 +16,7 @@ import { SearchComponent } from './components/search/search.component';
 import { MenuItemComponent } from './components/chats/menu-item/menu-item.component';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { WarningComponent } from './components/warning/warning.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -28,13 +30,15 @@ import { WarningComponent } from './components/warning/warning.component';
     SearchComponent,
     MenuItemComponent,
     AvatarComponent,
-    WarningComponent
+    WarningComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

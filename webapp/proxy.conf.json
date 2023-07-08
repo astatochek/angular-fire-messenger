@@ -3,5 +3,9 @@
   "target": "https://fonts.gstatic.com",
     "secure": true,
     "changeOrigin": true
+  },
+  "/api/*": {
+    "target": "http://localhost:8081",
+    "secure": false
   }
 }

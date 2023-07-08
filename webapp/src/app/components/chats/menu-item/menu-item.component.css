@@ -1,0 +1,16 @@
+.signal {
+  /* Default styles */
+  transition: opacity 300ms ease-in, transform 300ms ease-in;
+}
+
+.signal.animate-previous {
+  /* Styles for previous value */
+  opacity: 1;
+  transform: scale(1);
+}
+
+.signal.animate-current {
+  /* Styles for current value */
+  opacity: 1;
+  transform: scale(1.2);
+}
