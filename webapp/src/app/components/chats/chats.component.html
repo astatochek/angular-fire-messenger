@@ -1,0 +1,44 @@
+<main
+  class="w-full h-screen pt-navbar-size bg-dark-purple chat-background-with-gradient flex flex-col justify-start items-center">
+  <div class="flex flex-row justify-start items-start h-full w-full">
+    <div class="bg-charleston-green w-left-chat-menu h-full shadow-sm flex flex-col justify-start overflow-y-auto direction-rtl">
+      <app-menu-item *ngFor="let chat of chatService.chats()" [chat]="chat" [id]="chat.id"/>
+    </div>
+    <div class="flex flex-col justify-start items-start w-full min-w-fit h-full shadow-inner">
+      <div class="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col justify-start scroll-smooth" #wrapper>
+        <div #messages
+             *ngFor="let message of chat()?.messages"
+             [ngClass]="(message && message.sender.username === userService.user().username) ? 'flex-row-reverse' : 'flex-row'"
+             class="w-full flex justify-start"
+        >
+          <app-message [message]="message"/>
+        </div>
+        <div #anchor
+          class="w-full h-full flex items-center justify-center"
+          [ngClass]="this.chatService.selected() === undefined ? '' : 'opacity-0'"
+        >
+          <h1 class="font-bold text-4xl mb-5 drop-shadow-md slide-in-bottom" *ngIf="this.chatService.selected() === undefined">Chat not Selected</h1>
+        </div>
+        <div class="w-full px-3 pb-3 flex flex-row justify-around items-center sticky right-0 bottom-0" *ngIf="this.chatService.selected() !== undefined">
+          <input
+            class="w-full h-10 bg-charleston-green shadow-md shadow-charleston-green text-sm px-4 py-2 border focus:outline-0 border-white-80 rounded-xl"
+            [(ngModel)]="text"
+            (keyup.enter)="sendMessage()"
+          >
+          <button
+            class="w-10 h-10 bg-spanish-viridian ml-3 rounded-xl flex items-center justify-center"
+            (click)="sendMessage()"
+          >
+            <img src="assets/arrow.svg" alt="arrow" class="h-[45%]">
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+
+
+
+
