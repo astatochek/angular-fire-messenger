@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import LargeBinary
@@ -30,9 +30,9 @@ class Avatar(Base):
    prompt = Column(String)
    image_data = Column(LargeBinary)
 
-engine = create_engine("sqlite:///image.db")
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-session = SessionLocal()
+engine = create_engine("sqlite:///image.db", pool_size=100, max_overflow=0)
+session_factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+session = scoped_session(session_factory)
 Base.metadata.create_all(bind=engine)
 
 @app.get("/{prompt}")
@@ -43,8 +43,8 @@ def get_image(prompt: str, headers={"Origin": "http://localhost:4200"}):
         image_data = save_image(prompt, generate_avatar(456, prompt))
     else:
         image_data = image.image_data
-    
-    # response.headers["Content-Length"] = str(len(encoded_image))
+    image_data = save_image(prompt, generate_avatar(456, prompt))
+
     return StreamingResponse(io.BytesIO(image_data), media_type="image/jpeg")
 
 

@@ -10,7 +10,7 @@ import {UserService} from "../../services/user.service";
 })
 export class SearchComponent implements OnInit {
   ngOnInit(): void {
-      // this.userService.searchUsers("")
+      if (this.userService.isLoggedIn()) this.userService.searchUsers("")
   }
   private router = inject(Router)
   private chatService = inject(ChatService)

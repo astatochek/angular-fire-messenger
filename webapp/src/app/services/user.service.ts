@@ -115,9 +115,10 @@ export class UserService {
   }) {
     fetch(`http://localhost:${server.port}/create`, {
       method: "POST",
+      // mode: "no-cors",
       headers: {
         'Content-Type': 'application/json',
-        // 'Authorization': 'Bearer hui'
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJvdWJQWXBnbkZ4X0liWExrc2U3NGRmYzhuVWV4d0lubFd0MkQ4WjlLbjZJIn0.eyJleHAiOjE2ODcwNDIxMzgsImlhdCI6MTY4NzA0MTgzOCwianRpIjoiMjhmN2IwZjQtZjllZC00OTA4LTkyYzItZGQwM2EyNTNiYmY4IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90ZXN0IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjViMmFlMGRiLWE5ODgtNDA3OS05MGRhLTVlYjdlYTczNmQzMCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImNsaWVudCIsInNlc3Npb25fc3RhdGUiOiI1MTgyMzhiMS1hZmEyLTQ3MDctOWI1NC00MDU3NTZmNTIyYTgiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6NDIwMC8iXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtdGVzdCIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJzaWQiOiI1MTgyMzhiMS1hZmEyLTQ3MDctOWI1NC00MDU3NTZmNTIyYTgiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJpbGkgemhnaWxldmkiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpbGljaCIsImdpdmVuX25hbWUiOiJpbGkiLCJmYW1pbHlfbmFtZSI6InpoZ2lsZXZpIiwiZW1haWwiOiJ0ZXN0QG1haWwuY29tIn0.bzo69usx9SP2UMNnjl-sKkVjngS7LNfcUKAvaKKZxo8OzQjROa9WAV5IF5gOynZkq9pHOrugKA-UgcJbgWOS47dPY4dUsv0z8mKwVlD_8XZ4dQgD09bwYSxIn2VdpFm_NjClnFdZPExHgOqWQVdM0ja_MVjGCzpyJhH8k-vDtz8n0MS6K0E1hBzjPFmeawKT3tH-S90xHxncePYs0IS84ETiqnyR8EA6Ydd_HPpRXiFx7NmY0XjP_CCXxuGZpe-vJpfxPD-ymuw3CstWiXe6_QiUnD-uuGSsgVmqjBv9KnSi5UwIJxGeaKFbvqh-sxJH8UoKgcnmlNBu3Hj93fcWEg'
       },
       body: JSON.stringify({
         ...user,
@@ -201,6 +202,9 @@ export class UserService {
       this.getUserInfo(token)
     } else {
       console.log("Switch to Null User")
+      this.chatService.chats.set([])
+      this.chatService.selected.set(undefined)
+      this.chatService.webSocket?.unsubscribe()
       this.user.set({
         username: "",
         firstName: "",
