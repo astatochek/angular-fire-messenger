@@ -1,0 +1,135 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-jetbrains-mono text-white bg-dark-purple;
+  }
+  img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+  }
+}
+
+@layer components {
+  .navbar-button {
+    @apply py-1 rounded bg-transparent hover:bg-onyx active:bg-transparent transition ease-in-out duration-300;
+  }
+
+  .input-with-transition {
+    @apply bg-transparent text-sm active:bg-transparent px-8 py-4 mt-4 border-2 transition ease-in-out duration-300 focus:outline-0 hover:border-white border-white-80 rounded-xl hover:bg-white-10
+  }
+
+  .background-with-gradient {
+    background: radial-gradient(circle at top left, rgba(209, 17, 151, 0.5), transparent 40%),
+                radial-gradient(circle at bottom right, rgba(11, 3, 45, 0.6), transparent 40%);
+  }
+
+  .chat-background-with-gradient {
+    background: radial-gradient(circle at top left, rgba(122, 41, 96, 0.5), transparent 40%),
+    radial-gradient(circle at bottom right, rgba(23, 11, 65, 0.6), transparent 40%);
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .animated-to-scroll {
+    animation: scroll 10s linear infinite;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-scroll fixed
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-charleston-green
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white-10
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-white-20
+  }
+
+  .direction-rtl {
+    direction: rtl;
+  }
+
+  .direction-ltr {
+    direction: ltr;
+  }
+
+  @keyframes slideInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(50%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInTop {
+    0% {
+      opacity: 0;
+      transform: translateY(-50%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(50%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .slide-in-left {
+    animation: 0.5s ease-out 0s 1 slideInLeft;
+  }
+
+  .slide-in-right {
+    animation: 0.5s ease-out 0s 1 slideInRight;
+  }
+
+  .slide-in-top {
+    animation: 0.5s ease-out 0s 1 slideInTop;
+  }
+
+  .slide-in-bottom {
+    animation: 0.5s ease-out 0s 1 slideInBottom;
+  }
+}
