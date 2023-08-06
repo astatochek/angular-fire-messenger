@@ -25,29 +25,45 @@
   }
 
   .form-input {
-    @apply bg-transparent text-sm active:bg-transparent px-8 py-4 mt-4 border-2 transition ease-in-out duration-300 focus:outline-0 rounded-xl
+    @apply bg-transparent text-sm active:bg-transparent px-8 py-4 mt-4 border-2 transition ease-in-out duration-300 focus:outline-0 rounded-xl;
   }
 
   .input-valid {
-    @apply form-input hover:border-white border-white-80 hover:bg-white-10
+    @apply form-input hover:border-white border-white-80 hover:bg-white-10;
   }
 
   .button-green {
-    @apply transition ease-in-out duration-300 bg-spanish-viridian w-2/5 py-2 font-medium text-base rounded-xl active:bg-spanish-viridian hover:bg-[#00946c] disabled:bg-spanish-viridian disabled:opacity-80
+    @apply transition ease-in-out duration-300 bg-spanish-viridian w-2/5 py-2 font-medium text-base rounded-xl active:bg-spanish-viridian hover:bg-[#00946c] disabled:bg-spanish-viridian disabled:opacity-80;
   }
 
   .input-invalid {
-    @apply form-input hover:border-red-800 border-red-900 hover:bg-white-10 text-red-800 placeholder-red-800 placeholder-opacity-80
+    @apply form-input hover:border-red-800 border-red-900 hover:bg-white-10 text-red-800 placeholder-red-800 placeholder-opacity-80;
   }
 
   .background-with-gradient {
-    background: radial-gradient(circle at top left, rgba(209, 17, 151, 0.5), transparent 40%),
-                radial-gradient(circle at bottom right, rgba(11, 3, 45, 0.6), transparent 40%);
+    background: radial-gradient(
+        circle at top left,
+        rgba(209, 17, 151, 0.5),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at bottom right,
+        rgba(11, 3, 45, 0.6),
+        transparent 40%
+      );
   }
 
   .chat-background-with-gradient {
-    background: radial-gradient(circle at top left, rgba(122, 41, 96, 0.5), transparent 40%),
-    radial-gradient(circle at bottom right, rgba(23, 11, 65, 0.6), transparent 40%);
+    background: radial-gradient(
+        circle at top left,
+        rgba(122, 41, 96, 0.5),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at bottom right,
+        rgba(23, 11, 65, 0.6),
+        transparent 40%
+      );
   }
 
   @keyframes scroll {
@@ -64,17 +80,17 @@
   }
 
   ::-webkit-scrollbar {
-    @apply w-scroll fixed
+    @apply w-scroll fixed;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-charleston-green
+    @apply bg-charleston-green;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-white-10
+    @apply bg-white-10;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-white-20
+    @apply bg-white-20;
   }
 
   .direction-rtl {

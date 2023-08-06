@@ -14,7 +14,7 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import {MessageComponent} from "./components/chats/message/message.component";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AvatarComponent} from "./components/avatar/avatar.component";
 import {TruncatePipe} from "./pipes/truncate.pipe";
 import {NavbarComponent} from "./components/navbar/navbar.component";
@@ -25,7 +25,7 @@ import {NavbarComponent} from "./components/navbar/navbar.component";
     ChatsComponent,
     MenuItemComponent,
     WarningComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,10 +39,10 @@ import {NavbarComponent} from "./components/navbar/navbar.component";
     FormsModule,
     AvatarComponent,
     TruncatePipe,
-    NavbarComponent
+    NavbarComponent,
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

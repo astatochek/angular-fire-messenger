@@ -1,6 +1,9 @@
-import {Component, inject, signal} from '@angular/core';
-import {UserService} from "../../services/user.service";
-import {Router} from "@angular/router";
+import { Component, inject, signal } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { map, tap } from 'rxjs';
 
 interface IForm {
   username: string;
@@ -11,96 +14,30 @@ interface IForm {
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
 })
 export class RegisterComponent {
-  userService = inject(UserService)
-  router = inject(Router)
+  authService = inject(AuthService);
+  router = inject(Router);
 
-  form = signal<IForm>({username: '', firstName: '', lastName: '', password: ''})
+  registerForm = new FormGroup({
+    email: new FormControl('', [Validators.email, Validators.required]),
+    firstName: new FormControl('', [Validators.required]),
+    lastName: new FormControl('', [Validators.required]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
+  });
 
-  changeUsername(event: Event) {
-    const username = (event.target as HTMLInputElement).value
-    this.form.update(prev => {
-      return {
-        ...prev,
-        username: username
-      }
-    })
+  onSubmit() {
+    const { email, firstName, lastName, password } = this.registerForm.value;
+    if (!email || !firstName || !lastName || !password) return;
+    this.authService.registerWithEmailFullNameAndPassword(
+      email,
+      firstName,
+      lastName,
+      password,
+    );
   }
-
-  changePassword(event: Event) {
-    const password = (event.target as HTMLInputElement).value
-    this.form.update(prev => {
-      return {
-        ...prev,
-        password: password
-      }
-    })
-  }
-
-  changeFirstName(event: Event) {
-    const firstName = (event.target as HTMLInputElement).value
-    this.form.update(prev => {
-      return {
-        ...prev,
-        firstName: firstName
-      }
-    })
-  }
-
-  changeLastName(event: Event) {
-    const lastName = (event.target as HTMLInputElement).value
-    this.form.update(prev => {
-      return {
-        ...prev,
-        lastName: lastName
-      }
-    })
-  }
-
-  clickRegister() {
-    if (this.form().username === "" &&
-        this.form().password === "" &&
-        this.form().firstName === "" &&
-        this.form().lastName === ""
-    ) {
-      this.userService.registerWarning.set("Form can't be empty")
-      return
-    }
-    if (this.form().username === "") {
-      this.userService.registerWarning.set("Username can't be empty")
-      return
-    }
-    if (this.form().password === "") {
-      this.userService.registerWarning.set("Password can't be empty")
-      return
-    }
-    if (this.form().firstName === "") {
-      this.userService.registerWarning.set("First Name can't be empty")
-      return
-    }
-    if (this.form().lastName === "") {
-      this.userService.registerWarning.set("Last Name can't be empty")
-      return
-    }
-    this.userService.registerWarning.update(() => "")
-    this.userService.registerUser(this.form())
-  }
-
-  clickEnter(event: KeyboardEvent) {
-    if (event.key === "Enter") {
-      this.clickRegister()
-    }
-  }
-
-  clickClose() {
-    console.log('Close Clicked')
-    this.userService.registerWarning.set("")
-  }
-
-  navigateToLogin() {
-    this.router.navigate(['login']).then(console.log)
-  }
-
 }
