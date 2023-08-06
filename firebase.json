@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "messenger-angular-app",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}

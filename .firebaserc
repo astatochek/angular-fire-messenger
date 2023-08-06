@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angular-fire-messenger-ee413": {
+      "hosting": {
+        "messenger-angular-app": [
+          "angular-fire-messenger-ee413"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angular-fire-messenger-ee413"
+  }
+}
