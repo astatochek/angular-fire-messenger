@@ -21,7 +21,7 @@ The @Pipe decorator allows you to define the pipe name that you'll use within te
   This truncates the string to 10 letters and adds '...' to end.
 */
 
-@Pipe({ name: 'truncate' })
+@Pipe({ name: 'truncate', standalone: true })
 export class TruncatePipe implements PipeTransform {
 
   /*

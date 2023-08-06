@@ -1,73 +1,36 @@
-import {Component, inject, signal} from '@angular/core';
-import {UserService} from "../../services/user.service";
-import {Router} from "@angular/router";
-
-interface IForm {
-  username: string
-  password: string
-}
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NgClass } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, RouterLink, NgClass],
 })
-export class LoginComponent{
-  userService = inject(UserService)
-  router = inject(Router)
+export class LoginComponent {
+  router = inject(Router);
+  authService = inject(AuthService);
 
-  form = signal<IForm>({username: '', password: ''})
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.email, Validators.required]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
+  });
 
-  changeUsername(event: Event) {
-    const username = (event.target as HTMLInputElement).value
-    this.form.update(prev => {
-      return {
-        ...prev,
-        username: username
-      }
-    })
+  onSubmit() {
+    const { email, password } = this.loginForm.value;
+    if (!email || !password) return;
+    this.authService.logInWithEmailAndPassword(email, password);
   }
-
-  changePassword(event: Event) {
-    const password = (event.target as HTMLInputElement).value
-    this.form.update(prev => {
-      return {
-        ...prev,
-        password: password
-      }
-    })
-  }
-
-  clickLogin() {
-    if (this.form().username === "" && this.form().password === "") {
-      this.userService.loginWarning.set("Username and Password can't be empty")
-      return
-    }
-    if (this.form().username === "") {
-      this.userService.loginWarning.set("Username can't be empty")
-      return
-    }
-    if (this.form().password === "") {
-      this.userService.loginWarning.set("Password can't be empty")
-      return
-    }
-    this.userService.loginWarning.update(() => "")
-    this.userService.logIn(this.form().username, this.form().password)
-  }
-
-  clickEnter(event: KeyboardEvent) {
-    if (event.key === "Enter") {
-      this.clickLogin()
-    }
-  }
-
-  clickClose() {
-    console.log('Close Clicked')
-    this.userService.loginWarning.set("")
-  }
-
-  navigateToRegister() {
-    this.router.navigate(['register']).then(console.log)
-  }
-
 }

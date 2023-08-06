@@ -24,8 +24,20 @@
     @apply py-1 rounded bg-transparent hover:bg-onyx active:bg-transparent transition ease-in-out duration-300;
   }
 
-  .input-with-transition {
-    @apply bg-transparent text-sm active:bg-transparent px-8 py-4 mt-4 border-2 transition ease-in-out duration-300 focus:outline-0 hover:border-white border-white-80 rounded-xl hover:bg-white-10
+  .form-input {
+    @apply bg-transparent text-sm active:bg-transparent px-8 py-4 mt-4 border-2 transition ease-in-out duration-300 focus:outline-0 rounded-xl
+  }
+
+  .input-valid {
+    @apply form-input hover:border-white border-white-80 hover:bg-white-10
+  }
+
+  .button-green {
+    @apply transition ease-in-out duration-300 bg-spanish-viridian w-2/5 py-2 font-medium text-base rounded-xl active:bg-spanish-viridian hover:bg-[#00946c] disabled:bg-spanish-viridian disabled:opacity-80
+  }
+
+  .input-invalid {
+    @apply form-input hover:border-red-800 border-red-900 hover:bg-white-10 text-red-800 placeholder-red-800 placeholder-opacity-80
   }
 
   .background-with-gradient {

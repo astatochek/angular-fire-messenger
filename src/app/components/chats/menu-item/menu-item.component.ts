@@ -1,6 +1,7 @@
 import {Component, inject, Input} from '@angular/core';
 import {ChatService} from "../../../services/chat.service";
 import IChat from "../../../models/chat";
+import {truncate} from "lodash";
 
 @Component({
   selector: 'app-menu-item',
@@ -21,4 +22,5 @@ export class MenuItemComponent {
     messages: []
   }
 
+  protected readonly truncate = truncate;
 }

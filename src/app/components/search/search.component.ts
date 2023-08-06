@@ -3,10 +3,15 @@ import IUser from "../../models/user";
 import {Router} from "@angular/router";
 import {ChatService} from "../../services/chat.service";
 import {UserService} from "../../services/user.service";
+import {AvatarComponent} from "../avatar/avatar.component";
+import {TruncatePipe} from "../../pipes/truncate.pipe";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-search',
-  templateUrl: './search.component.html'
+  templateUrl: './search.component.html',
+  standalone: true,
+  imports: [AvatarComponent, TruncatePipe, NgClass]
 })
 export class SearchComponent implements OnInit {
   ngOnInit(): void {

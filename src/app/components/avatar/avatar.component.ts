@@ -7,10 +7,16 @@ import {
   signal,
 } from '@angular/core';
 import {AvatarService} from "../../services/avatar.service";
+import {NgClass, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-avatar',
-  templateUrl: './avatar.component.html'
+  templateUrl: './avatar.component.html',
+  imports: [
+    NgClass,
+    NgIf
+  ],
+  standalone: true
 })
 export class AvatarComponent implements OnInit, OnChanges {
 
