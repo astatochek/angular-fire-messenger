@@ -11,6 +11,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   user,
+  updatePassword,
+  updateEmail,
+  User,
 } from '@angular/fire/auth';
 import {
   collection,
@@ -18,6 +21,7 @@ import {
   getDoc,
   doc,
   setDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs';
@@ -63,6 +67,7 @@ export class AuthService {
   }
 
   logOut() {
+    console.log('Trying to Log Out');
     this.auth.signOut().then(() => this.navigateAfterLogOut());
   }
 
@@ -87,6 +92,57 @@ export class AuthService {
   setUserInUsersCollection(user: UserCollectionDoc) {
     setDoc(doc(this.usersCollectionRef, user.uid), user).then();
   }
+
+  updateUserInfo<
+    T extends Partial<{
+      firstName: string | null;
+      lastName: string | null;
+      password: string | null;
+    }>,
+  >(info: T) {
+    let { firstName, lastName, password } = info;
+    const user = this.user();
+    if (!user) return;
+    firstName = !firstName ? user.firstName : firstName;
+    lastName = !lastName ? user.lastName : lastName;
+
+    this.updateFirestoreUser(firstName, lastName).then(() => {
+      if (password) {
+        this.updatePassword(password).then();
+      } else {
+        getDoc(doc(this.usersCollectionRef, user.uid)).then((doc) => {
+          this.user.update(() => doc.data() as unknown as UserCollectionDoc);
+        });
+      }
+    });
+  }
+
+  private async updateFirestoreUser(firstName: string, lastName: string) {
+    const user = this.user();
+    if (!user) return;
+    return updateDoc(doc(this.usersCollectionRef, user.uid), {
+      ...user,
+      firstName: firstName === '' ? user.firstName : firstName,
+      lastName: lastName === '' ? user.lastName : lastName,
+    }).catch(this.handleError);
+  }
+
+  private async updatePassword(password: string) {
+    const user = this.fireUser();
+    if (!user) return;
+    return updatePassword(user, password).catch(this.handleError);
+  }
+
+  handleError(err: unknown) {
+    console.error(err);
+    this.logOut();
+  }
+
+  // private async updateEmail(email: string) {
+  //   const user = this.fireUser();
+  //   if (!user) return;
+  //   return updateEmail(user, email);
+  // }
 
   navigateAfterLogIn() {
     this.router.navigate(['/profile']).then();

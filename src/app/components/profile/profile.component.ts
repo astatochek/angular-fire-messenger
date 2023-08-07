@@ -31,11 +31,11 @@ export class ProfileComponent {
   }
 
   onSubmit() {
-    console.log(this.profileForm.value);
+    this.authService.updateUserInfo(this.profileForm.value);
+    this.onClear();
   }
 
   onLogOut() {
-    console.log('Clicked!');
     this.authService.logOut();
   }
 }

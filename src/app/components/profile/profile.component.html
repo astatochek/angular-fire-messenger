@@ -41,7 +41,7 @@
           />
           <div class="flex flex-row justify-between items-center w-full mt-4">
             <button
-              [disabled]="profileForm.invalid"
+              [disabled]="profileForm.invalid || !profileForm.dirty"
               class="button-green w-[55%]"
               type="submit"
             >

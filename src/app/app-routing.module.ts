@@ -19,7 +19,7 @@ const AuthGuard: CanActivateFn = (route, state) => {
 };
 
 const routes: Routes = [
-  // { path: '', redirectTo: '/profile', pathMatch: 'full' },
+  { path: '', redirectTo: '/profile', pathMatch: 'full' },
   {
     path: 'login',
     component: LoginComponent,
@@ -45,7 +45,7 @@ const routes: Routes = [
     component: SearchComponent,
     canActivate: [AuthGuard],
   },
-  // { path: '**', redirectTo: '/profile' },
+  { path: '**', redirectTo: '/profile' },
 ];
 
 @NgModule({

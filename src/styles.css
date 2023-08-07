@@ -32,12 +32,12 @@
     @apply form-input hover:border-white border-white-80 hover:bg-white-10;
   }
 
-  .button-green {
-    @apply transition ease-in-out duration-300 bg-spanish-viridian py-2 font-medium text-base rounded-xl active:bg-spanish-viridian hover:bg-[#00946c] disabled:bg-spanish-viridian disabled:opacity-80;
+  .input-invalid {
+    @apply form-input border-red-900 text-red-800 placeholder-red-800 placeholder-opacity-80 bg-opacity-0 bg-red-700 hover:bg-opacity-10 active:bg-transparent;
   }
 
-  .input-invalid {
-    @apply form-input hover:border-red-800 border-red-900 hover:bg-white-10 text-red-800 placeholder-red-800 placeholder-opacity-80;
+  .button-green {
+    @apply transition ease-in-out duration-300 bg-spanish-viridian py-2 font-medium text-base rounded-xl active:bg-spanish-viridian hover:bg-[#00946c] disabled:bg-spanish-viridian disabled:opacity-80;
   }
 
   .background-with-gradient {
