@@ -1,24 +1,21 @@
-import {Component, computed, inject} from '@angular/core';
-import {UserService} from "../../services/user.service";
-import {Router, RouterLink} from "@angular/router";
-import {ChatService} from "../../services/chat.service";
-import {TruncatePipe} from "../../pipes/truncate.pipe";
-import {NgIf, TitleCasePipe} from "@angular/common";
+import { Component, computed, inject } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { Router, RouterLink } from '@angular/router';
+import { ChatService } from '../../services/chat.service';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { NgIf, TitleCasePipe } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   standalone: true,
-  imports: [TruncatePipe, RouterLink, NgIf, TitleCasePipe]
+  imports: [TruncatePipe, RouterLink, NgIf, TitleCasePipe],
 })
 export class NavbarComponent {
+  private authService = inject(AuthService);
+  router = inject(Router);
 
-  userService = inject(UserService)
-  chatService = inject(ChatService)
-  router = inject(Router)
-
-  isLoggedIn = computed(() => this.userService.isLoggedIn())
-  username = computed(() => this.userService.user().username)
-  interlocutor = computed(() => this.chatService.interlocutor())
-
+  isLoggedIn = computed(() => this.authService.isLoggedIn());
+  username = computed(() => this.authService.user()?.email ?? '...');
 }

@@ -8,9 +8,6 @@
   <div class="grid grid-cols-3 w-full min-w-fit" *ngIf="isLoggedIn()">
     <div></div>
     <div class="px-4 py-1 text-center">
-      <p *ngIf="interlocutor() && router.url === '/chats'" class="">
-        <span class="font-light">Chat with: </span><span class="select-all font-medium">{{ (interlocutor()?.username || "") | titlecase | truncate:15 }}</span>
-      </p>
     </div>
     <div class="px-4 py-1 select-all text-right">
       {{ username() }}

@@ -1,54 +1,79 @@
 <main
-  class="w-full h-screen overflow-x-hidden pr-w-scroll overflow-y-auto pt-navbar-size bg-american-purple background-with-gradient flex flex-col justify-start items-center">
+  class="w-full h-screen overflow-x-hidden pr-w-scroll overflow-y-auto pt-navbar-size bg-american-purple background-with-gradient flex flex-col justify-start items-center"
+>
   <div class="grid grid-cols-2 w-[60rem] mt-navbar-size">
     <div class="flex flex-col justify-start items-center mt-2 slide-in-left">
       <h1 class="font-bold text-4xl mb-5 drop-shadow-md">Profile Info</h1>
-      <div class="bg-dark-purple border-2 border-white-40 px-10 py-4 rounded-2xl">
-        <div class="flex flex-col justify-start items-center w-form-len">
+      <div
+        class="bg-dark-purple border-2 border-white-40 px-10 py-4 rounded-2xl"
+      >
+        <form
+          [formGroup]="profileForm"
+          (ngSubmit)="onSubmit()"
+          class="flex flex-col justify-start items-center w-form-len"
+        >
           <h2 class="font-normal text-lg">Edit your profile information</h2>
           <div class="flex flex-row justify-between items-center w-form-len">
-            <input type="text" [(ngModel)]="firstName" class="input-with-transition w-[40%]"
-                   [placeholder]="userService.user().firstName">
-            <input type="text" [(ngModel)]="lastName" class="input-with-transition w-[55%]"
-                   [placeholder]="userService.user().lastName">
+            <input
+              type="text"
+              class="input-valid w-[40%]"
+              [formControl]="profileForm.controls.firstName"
+              [placeholder]="this.user()?.firstName ?? ''"
+            />
+            <input
+              type="text"
+              class="input-valid w-[55%]"
+              [formControl]="profileForm.controls.lastName"
+              [placeholder]="this.user()?.lastName ?? ''"
+            />
           </div>
-          <input type="password" [(ngModel)]="password" class="input-with-transition w-full" placeholder="Password">
+          <input
+            type="password"
+            [formControl]="profileForm.controls.password"
+            class="w-full"
+            placeholder="Password"
+            [ngClass]="
+              profileForm.controls.password.valid ||
+              !profileForm.controls.password.dirty
+                ? 'input-valid'
+                : 'input-invalid'
+            "
+          />
           <div class="flex flex-row justify-between items-center w-full mt-4">
             <button
-              class="transition ease-in-out duration-300 w-[55%] bg-spanish-viridian py-3 font-medium text-base rounded-xl active:bg-spanish-viridian hover:bg-[#00946c]"
-              (click)="changeInfo()"
+              [disabled]="profileForm.invalid"
+              class="button-green w-[55%]"
+              type="submit"
             >
               Save
             </button>
             <button
               class="transition ease-in-out duration-300 w-[40%] hover:border-white border-2 border-white-70 py-3 font-medium text-base rounded-xl hover:bg-white-10 active:bg-transparent"
-              (click)="clearForm()"
+              (click)="onClear()"
             >
               Clear
             </button>
           </div>
           <button
             class="transition ease-in-out duration-300 mt-4 bg-opacity-0 bg-red-700 w-full py-3 font-medium text-base text-red-700 rounded-xl border-2 border-red-700 hover:bg-opacity-10 active:bg-transparent"
-            (click)="userService.changeToken('', false)"
+            (click)="onLogOut()"
           >
             Log Out
           </button>
-        </div>
+        </form>
       </div>
     </div>
     <div class="flex flex-col justify-end items-center slide-in-right">
       <app-avatar
-        [username]="userService.user().username"
+        [username]="user()?.email ?? ''"
         [styles]="['w-full', 'rounded-[50%]', 'shadow']"
         class="w-72"
       />
       <div class="flex flex-col justify-start items-center w-form-len mt-8">
-        <h2 class="font-normal text-lg select-all">{{ userService.user().username }}</h2>
+        <h2 class="font-normal text-lg select-all">
+          {{ user()?.email ?? '...' }}
+        </h2>
       </div>
     </div>
   </div>
 </main>
-
-
-
-
