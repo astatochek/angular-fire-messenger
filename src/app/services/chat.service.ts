@@ -10,6 +10,9 @@ import {
   where,
   setDoc,
   addDoc,
+  doc,
+  updateDoc,
+  Timestamp,
 } from '@angular/fire/firestore';
 import {
   combineLatest,
@@ -22,7 +25,7 @@ import {
   tap,
 } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Chat, ChatDto } from '../models/chat.interface';
+import { Chat, ChatDto, Message } from '../models/chat.interface';
 import { AuthService } from './auth.service';
 import { MessengerUser } from '../models/user.interface';
 import { SearchService } from './search.service';
@@ -117,14 +120,13 @@ export class ChatService {
         chat.firstParticipant.uid === uid || chat.secondParticipant.uid === uid,
     );
     if (!chat) {
-      addDoc(this.chatsCollectionRef, {
+      setDoc(doc(this.firestore, 'chats', user.uid + uid), {
         id: user.uid + uid,
         firstParticipant: user.uid,
         secondParticipant: uid,
         messages: [],
       } as ChatDto)
-        .then((doc) => {
-          const id = doc.id;
+        .then(() => {
           this.router.navigate(['chats', user.uid + uid]).then();
         })
         .catch((err) => {
@@ -134,6 +136,30 @@ export class ChatService {
     } else {
       this.router.navigate(['chats', chat.id]).then();
     }
+  }
+
+  sendMessage(text: string) {
+    const user = this.user();
+    const chat = this.selectedChat();
+    if (!user || !chat) return;
+    const message: Message = {
+      content: text,
+      sender:
+        user.uid === chat.firstParticipant.uid
+          ? 'firstParticipant'
+          : 'secondParticipant',
+      timestamp: Timestamp.now(),
+    };
+    const messages = chat.messages;
+    messages.push(message);
+    updateDoc(doc(this.firestore, 'chats', chat.id), {
+      messages: messages,
+    })
+      .then(console.log)
+      .catch((err) => {
+        console.error(err);
+        this.authService.logOut();
+      });
   }
 
   constructor() {
