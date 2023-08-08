@@ -7,6 +7,7 @@ import { SearchComponent } from './components/search/search.component';
 import { UserService } from './services/user.service';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
+import { ChatComponent } from './components/chats/chat/chat.component';
 
 const AuthGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -39,6 +40,13 @@ const routes: Routes = [
     path: 'chats',
     component: ChatsComponent,
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: ':id',
+        component: ChatComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
   },
   {
     path: 'search',

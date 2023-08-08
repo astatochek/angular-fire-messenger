@@ -18,6 +18,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AvatarComponent} from "./components/avatar/avatar.component";
 import {TruncatePipe} from "./pipes/truncate.pipe";
 import {NavbarComponent} from "./components/navbar/navbar.component";
+import { ChatComponent } from './components/chats/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {NavbarComponent} from "./components/navbar/navbar.component";
     MenuItemComponent,
     WarningComponent,
     RegisterComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

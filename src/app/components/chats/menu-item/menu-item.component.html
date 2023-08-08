@@ -1,32 +1,32 @@
-<div
+<a
   class="w-full h-20 py-3 flex flex-row slide-in-top justify-start items-center select-none cursor-pointer direction-ltr transition ease-in-out duration-500"
-  (click)="chatService.selectChat(chat.id)"
+  [routerLink]="chatId"
   [ngClass]="[
-          chat.id === chatService.selected() ? 'bg-spanish-viridian' : 'bg-raisin-black',
-          chat.id !== chatService.selected() ? 'hover:bg-charleston-green' : ''
+          chatId === selected() ? 'bg-spanish-viridian' : 'bg-raisin-black',
+          chatId !== selected() ? 'hover:bg-charleston-green' : ''
         ]"
 >
   <app-avatar
-    [username]="chat.interlocutor.username"
+    [username]="interlocutor()?.email ?? ''"
     [styles]="['w-12', 'rounded-[12px]']"
     class="mx-3 w-12"
   />
   <div>
     <h1 class="font-bold text-base">
-      {{ chat.interlocutor.username | titlecase | truncate : 15 }}
+      {{ interlocutor()?.email ?? '' | titlecase | truncate : 15 }}
     </h1>
     <div
-      *ngIf="chat.id === chatService.selected(); else elseBlock"
+      *ngIf="chatId === selected(); else elseBlock"
       class="font-normal text-sm w-44 overflow-clip whitespace-nowrap"
     >
-      <p class="animated-to-scroll">
+      <p class="animated-to-scroll" *ngIf="chat() as chat">
         {{ chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].content : "" }}
       </p>
     </div>
     <ng-template #elseBlock>
-      <p class="font-normal text-sm">
+      <p class="font-normal text-sm" *ngIf="chat() as chat">
         {{ (chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].content : "") | truncate : 20 }}
       </p>
     </ng-template>
   </div>
-</div>
+</a>

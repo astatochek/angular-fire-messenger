@@ -1,172 +1,142 @@
-import {computed, effect, inject, Injectable, signal} from '@angular/core';
-import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
-import * as _ from 'lodash'
-import IChat from "../models/chat";
-import IUser from "../models/user";
-import IMessage from "../models/message";
-import {Router} from "@angular/router";
-const server = {
-  port: "-1"
-}
-
-interface IWebSocketMessage extends Omit<IMessage, 'date'> {
-  date: string
-}
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { ParamMap, Router } from '@angular/router';
+import {
+  Firestore,
+  collectionData,
+  collection,
+  getDoc,
+  query,
+  or,
+  where,
+  setDoc,
+  addDoc,
+} from '@angular/fire/firestore';
+import {
+  combineLatest,
+  combineLatestWith,
+  map,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Chat, ChatDto } from '../models/chat.interface';
+import { AuthService } from './auth.service';
+import { MessengerUser } from '../models/user.interface';
+import { SearchService } from './search.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatService {
-  router = inject(Router)
+  private router = inject(Router);
+  private firestore = inject(Firestore);
+  private authService = inject(AuthService);
+  private searchService = inject(SearchService);
 
-  webSocket: WebSocketSubject<any> | undefined = undefined
+  private users$ = this.searchService.users$;
+  private user$ = this.authService.user$;
 
-  chats = signal<IChat[]>([])
-  selected = signal<number | undefined>(undefined)
-  interlocutor = computed(() => {
-    const id = this.selected()
-    if (id === undefined) return undefined
-    const idx = this.chats().map(chat => chat.id).indexOf(id)
-    return this.chats()[idx].interlocutor
-  })
+  private user = computed(() => this.authService.user());
 
-  private user: IUser
-  private token: string
+  private selectedChatId = new Subject<string | null>();
 
-  init(user: IUser, token: string) {
-    this.user = user
-    this.token = token
-    if (this.chats().length === 0 && this.user.username !== '') {
-      this.fetchChats(user.username).then(() => {
-        this.selected.set(this.chats().length > 0 ? this.chats()[0].id : undefined)
-        this.webSocket = webSocket(`ws://localhost:${server.port}/ws`)
-        this.webSocket.next({ username: user.username })
-        this.webSocket.asObservable().subscribe((msg: IWebSocketMessage) => {
-          const message: IMessage = { ...msg, date: new Date(msg.date) }
-          const allChatIDs = this.chats().map(chat => chat.id)
-          if (allChatIDs.includes(message.chatId)) {
-            this.chats.mutate(prev => prev[allChatIDs.indexOf(message.chatId)]
-              .messages.push(message))
-          } else {
-            this.chats.mutate(prev => prev.push({
-              id: message.chatId,
-              interlocutor: message.sender,
-              messages: [message]
-            }))
-          }
-        })
-      })
-      console.log("Initialization Proceeded")
-    } else {
-      console.log("Initialization Rejected")
-    }
+  public selectChat(id: string) {
+    this.selectedChatId.next(id);
   }
 
-  async fetchChats(username: string) {
-    const res = await fetch(`http://localhost:${server.port}/chat/chats?` + new URLSearchParams({
-      username: username
-    }), {
-      method: "GET",
-      headers: {
-        'Authorization': `Bearer ${this.token}`
-      },
-    })
-    switch (res.status) {
-      case 403:
-        // bruh :)
-        break
-      case 200:
-        const chats: { chatId: number, participants: IUser[]}[] = await res.json()
-        console.log(chats)
-        this.chats.set(chats
-          // .filter(item => item.participants.includes(username))
-          .map(item => {
-            const interlocutor = item.participants.filter(value => value.username !== username)[0]
-            return {
-              id: item.chatId,
-              interlocutor: interlocutor,
-              messages: []
-            }
-          })
-        )
-        this.chats().forEach(chat => {
-          this.fetchMessages(chat.id).then(data => this.chats.mutate(prev => {
-            prev[prev.map(chat => chat.id).indexOf(chat.id)].messages = data
-          }))
+  public selected = toSignal(this.selectedChatId.asObservable());
+
+  private chatsCollectionRef = collection(this.firestore, 'chats');
+
+  private chats$ = this.user$.pipe(
+    switchMap((user) => {
+      if (!user) return of(null);
+      return collectionData(
+        query(
+          this.chatsCollectionRef,
+          or(
+            where('firstParticipant', '==', user.uid),
+            where('secondParticipant', '==', user.uid),
+          ),
+        ),
+      ).pipe(
+        map((arr) =>
+          arr.map(
+            (doc) =>
+              ({
+                id: doc.id,
+                firstParticipant: doc.firstParticipant,
+                secondParticipant: doc.secondParticipant,
+                messages: doc.messages,
+              }) as ChatDto,
+          ),
+        ),
+        combineLatestWith(this.users$),
+        map(([chats, users]) => {
+          const usersRecord = users.reduce(
+            (acc, user) => {
+              acc[user.uid] = user;
+              return acc;
+            },
+            {} as Record<string, MessengerUser>,
+          );
+          console.log(chats);
+          // console.log(usersRecord);
+          return chats.map(
+            (chat) =>
+              ({
+                ...chat,
+                firstParticipant: usersRecord[chat.firstParticipant],
+                secondParticipant: usersRecord[chat.secondParticipant],
+              }) as Chat,
+          );
+        }),
+      );
+    }),
+  );
+
+  private selectedChat$ = this.selectedChatId.asObservable().pipe(
+    combineLatestWith(this.chats$),
+    map(([id, chats]) => {
+      if (!id || !chats) return null;
+      return chats.find((chat) => chat.id === id) ?? null;
+    }),
+  );
+
+  public chats = toSignal(this.chats$);
+  public selectedChat = toSignal(this.selectedChat$);
+
+  public goToChatWith(uid: string) {
+    const user = this.user();
+    if (!user) return;
+    const chat = this.chats()?.find(
+      (chat) =>
+        chat.firstParticipant.uid === uid || chat.secondParticipant.uid === uid,
+    );
+    if (!chat) {
+      addDoc(this.chatsCollectionRef, {
+        id: user.uid + uid,
+        firstParticipant: user.uid,
+        secondParticipant: uid,
+        messages: [],
+      } as ChatDto)
+        .then((doc) => {
+          const id = doc.id;
+          this.router.navigate(['chats', user.uid + uid]).then();
         })
+        .catch((err) => {
+          console.error(err);
+          this.authService.logOut();
+        });
+    } else {
+      this.router.navigate(['chats', chat.id]).then();
     }
   }
 
   constructor() {
-    // setInterval(() => {
-    //   if (this.user.username === "ilich") {
-    //     this.selected.set(_.sample(this.chats().map(chat => chat.id)))
-    //     this.sendMessage("Do you want to develop an app?")
-    //   }
-    // }, 1000)
-    effect(() => console.log("Selected:", this.selected()))
-    effect(() => console.log("Chats:", this.chats()))
+    effect(() => console.log('Selected Chat:', this.selectedChat()));
   }
-
-  selectChat(id: number) {
-    if (this.chats().map(chat => chat.id).includes(id))
-      this.selected.update(() => id);
-  }
-
-  sendMessage(text: string) {
-    if (this.selected() === undefined) return
-    fetch(`http://localhost:${server.port}/chat/send`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.token}`
-      },
-      body: JSON.stringify({
-        chatId: this.selected(),
-        sender: this.user.username,
-        content: text
-      })
-    })
-      .then(console.log)
-    this.webSocket?.next({
-      sender: this.user.username,
-      chatId: this.selected(),
-      content: text
-    })
-  }
-
-  async addChatWith(interlocutor: IUser) {
-    if (this.chats().map(chat => chat.interlocutor.username).includes(interlocutor.username)) {
-      return
-    }
-    const res = await fetch(`http://localhost:${server.port}/chat/addchat`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.token}`
-      },
-      body: JSON.stringify({
-        users: [interlocutor.username, this.user.username]
-      })
-    })
-    const id = await res.json()
-    this.chats.mutate(next => next.push({
-      id: id,
-      interlocutor: interlocutor,
-      messages: []
-    }))
-  }
-
-  async fetchMessages(id: number): Promise<IMessage[]> {
-    const res = await fetch(`http://localhost:${server.port}/chat/messages?` + new URLSearchParams({
-      id: `${id}`
-    }), {
-      method: "GET",
-      headers: {
-        'Authorization': `Bearer ${this.token}`
-      }
-    })
-    return await res.json()
-  }
-
 }

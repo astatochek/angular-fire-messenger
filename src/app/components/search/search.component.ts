@@ -1,41 +1,33 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import IUser from "../../models/user";
-import {Router} from "@angular/router";
-import {ChatService} from "../../services/chat.service";
-import {UserService} from "../../services/user.service";
-import {AvatarComponent} from "../avatar/avatar.component";
-import {TruncatePipe} from "../../pipes/truncate.pipe";
-import {NgClass} from "@angular/common";
+import { Component, inject, Signal } from '@angular/core';
+
+import { AvatarComponent } from '../avatar/avatar.component';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+
+import { MessengerUser } from '../../models/user.interface';
+import { SearchService } from '../../services/search.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   standalone: true,
-  imports: [AvatarComponent, TruncatePipe, NgClass]
+  imports: [AvatarComponent, TruncatePipe, NgClass, AsyncPipe, NgIf, NgForOf],
 })
-export class SearchComponent implements OnInit {
-  ngOnInit(): void {
-      if (this.userService.isLoggedIn()) this.userService.searchUsers("")
-  }
-  private router = inject(Router)
-  private chatService = inject(ChatService)
-  private userService = inject(UserService)
+export class SearchComponent {
+  private searchService = inject(SearchService);
+  private chatService = inject(ChatService);
 
-  keyword = signal("")
-  users = computed(() => this.userService.queriedUsers())
+  keyword = this.searchService.keyword;
 
-  handleSearch(event: Event) {
-    const val = (event.target as HTMLInputElement).value
-    this.keyword.update(() => val)
-    this.userService.searchUsers(this.keyword())
+  onChanges(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.searchService.updateKeyword(val);
   }
 
-  async goToChat(interlocutor: IUser) {
-    if (!this.chatService.chats().map(chat => chat.interlocutor.username).includes(interlocutor.username)) {
-      await this.chatService.addChatWith(interlocutor)
-    }
-    this.chatService.selected.set(this.chatService.chats()[this.chatService.chats().map(chat => chat.interlocutor.username).indexOf(interlocutor.username)].id)
-    this.router.navigate(['chats']).then(console.log)
-  }
+  users: Signal<MessengerUser[]> = this.searchService.queriedUsers;
 
+  goToChat(interlocutor: MessengerUser) {
+    this.chatService.goToChatWith(interlocutor.uid);
+  }
 }

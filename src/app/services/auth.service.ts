@@ -40,10 +40,11 @@ export class AuthService {
   private firestore = inject(Firestore);
   private usersCollectionRef = collection(this.firestore, 'users');
 
-  user: WritableSignal<UserCollectionDoc | null | undefined> =
+  public user$ = user(this.auth);
+  public user: WritableSignal<UserCollectionDoc | null | undefined> =
     signal(undefined);
   private fireUser = toSignal(
-    user(this.auth).pipe(
+    this.user$.pipe(
       tap((user) => {
         if (!user) this.user.update(() => null);
         else {
