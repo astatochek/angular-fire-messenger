@@ -6,8 +6,6 @@ import {
   OnInit,
   Signal,
 } from '@angular/core';
-import IMessage from '../../../models/message';
-import { UserService } from '../../../services/user.service';
 import { AvatarComponent } from '../../avatar/avatar.component';
 import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { Chat, Message } from '../../../models/chat.interface';

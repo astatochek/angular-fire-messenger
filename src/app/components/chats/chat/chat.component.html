@@ -1,10 +1,11 @@
 <div
+  *ngIf="chat() as chat"
   class="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col justify-start scroll-smooth"
   #wrapper
 >
   <div
     #messages
-    *ngFor="let message of chat()?.messages ?? []"
+    *ngFor="let message of chat.messages"
     [ngClass]="
       message && senderIsAuthUser(message)
         ? 'flex-row-reverse'
@@ -12,7 +13,7 @@
     "
     class="w-full flex justify-start"
   >
-    <app-message [message]="message" [chat]="chat()"/>
+    <app-message [message]="message" [chat]="chat"/>
   </div>
   <div
     #anchor

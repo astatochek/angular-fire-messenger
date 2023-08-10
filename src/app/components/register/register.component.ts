@@ -1,9 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
-import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { map, tap } from 'rxjs';
 
 interface IForm {
   username: string;

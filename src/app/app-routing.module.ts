@@ -4,7 +4,6 @@ import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ChatsComponent } from './components/chats/chats.component';
 import { SearchComponent } from './components/search/search.component';
-import { UserService } from './services/user.service';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
 import { ChatComponent } from './components/chats/chat/chat.component';

@@ -1,7 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { UserService } from '../../services/user.service';
 import { Router, RouterLink } from '@angular/router';
-import { ChatService } from '../../services/chat.service';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { NgIf, TitleCasePipe } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
