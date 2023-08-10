@@ -117,13 +117,7 @@ export class ChatService {
   );
 
   public selectedChat$ = this.selectedChatId.asObservable().pipe(
-    // combineLatestWith(this.chats$),
-    // map(([id, chats]) => {
-    //   if (!id || !chats) return null;
-    //   return chats.find((chat) => chat.id === id) ?? null;
-    // }),
     combineLatestWith(this.user$),
-    // tap(([id, user]) => console.log('Tap On:', id, user)),
     switchMap(([id, user]) => {
       if (!id || !user) return of(null);
       return docData(doc(this.firestore, 'chats', id)).pipe(
