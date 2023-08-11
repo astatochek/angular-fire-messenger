@@ -15,11 +15,16 @@ import { AuthService } from '../../../services/auth.service';
 import { Chat } from '../../../models/chat.interface';
 import { MessengerUser } from '../../../models/user.interface';
 import { Message } from '../../../models/chat.interface';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { MessageComponent } from '../message/message.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: [],
+  standalone: true,
+  imports: [NgIf, NgForOf, NgClass, MessageComponent, FormsModule],
 })
 export class ChatComponent implements AfterViewChecked {
   route = inject(ActivatedRoute);

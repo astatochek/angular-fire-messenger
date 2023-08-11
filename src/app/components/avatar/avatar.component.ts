@@ -1,12 +1,4 @@
-import {
-  Component,
-  inject,
-  Input,
-  OnChanges,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { AvatarService } from '../../services/avatar.service';
+import { Component, Input } from '@angular/core';
 import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 
 @Component({

@@ -1,18 +1,19 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-interface IForm {
-  username: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-}
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
+  imports: [ReactiveFormsModule, NgClass, RouterLink],
+  standalone: true,
 })
 export class RegisterComponent {
   authService = inject(AuthService);

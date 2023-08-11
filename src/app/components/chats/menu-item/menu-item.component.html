@@ -1,31 +1,32 @@
 <a
   class="w-full h-20 py-3 flex flex-row slide-in-top justify-start items-center select-none cursor-pointer direction-ltr transition ease-in-out duration-500"
-  [routerLink]="chatId"
+  [routerLink]="chat.id"
+  *ngIf="getOtherUser() as otherUser"
   [ngClass]="[
-          chatId === selected() ? 'bg-spanish-viridian' : 'bg-raisin-black',
-          chatId !== selected() ? 'hover:bg-charleston-green' : ''
+          chat.id === selected() ? 'bg-spanish-viridian' : 'bg-raisin-black',
+          chat.id !== selected() ? 'hover:bg-charleston-green' : ''
         ]"
 >
   <app-avatar
-    [username]="interlocutor()?.email ?? ''"
+    [username]="otherUser.email"
     [styles]="['w-12', 'rounded-[12px]']"
     class="mx-3 w-12"
   />
   <div>
     <h1 class="font-bold text-base">
-      {{ interlocutor()?.email ?? '' | titlecase | truncate : 15 }}
+      {{ otherUser.email | titlecase | truncate : 15 }}
     </h1>
     <div
-      *ngIf="chatId === selected(); else elseBlock"
+      *ngIf="chat.id === selected(); else elseBlock"
       class="font-normal text-sm w-44 overflow-clip whitespace-nowrap"
     >
-      <p class="animated-to-scroll" *ngIf="chat() as chat">
-        {{ chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].content : "" }}
+      <p class="animated-to-scroll">
+        {{ chat.messages.length > 0 ? chat.messages[0].content : "" }}
       </p>
     </div>
     <ng-template #elseBlock>
-      <p class="font-normal text-sm" *ngIf="chat() as chat">
-        {{ (chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].content : "") | truncate : 20 }}
+      <p class="font-normal text-sm">
+        {{ (chat.messages.length > 0 ? chat.messages[0].content : "") | truncate : 20 }}
       </p>
     </ng-template>
   </div>

@@ -60,8 +60,6 @@ export class ChatService {
     this.selectedChatId.next(id);
   }
 
-  public selected$ = this.selectedChatId.asObservable();
-
   public selected = toSignal(this.selectedChatId.asObservable());
 
   private chatsCollectionRef = collection(this.firestore, 'chats');
@@ -72,28 +70,43 @@ export class ChatService {
         this.chats.update(() => null);
         return of(null);
       }
-      return collectionData(
-        query(
-          this.chatsCollectionRef,
-          or(
-            where('firstParticipant', '==', user.uid),
-            where('secondParticipant', '==', user.uid),
+      return zip(
+        of(user),
+        collectionData(
+          query(
+            this.chatsCollectionRef,
+            or(
+              where('firstParticipant', '==', user.uid),
+              where('secondParticipant', '==', user.uid),
+            ),
           ),
         ),
       ).pipe(
-        map((arr) =>
-          arr.map(
+        switchMap(([user, arr]) => {
+          const chatDto = arr.map(
             (doc) =>
               ({
                 id: doc.id,
                 firstParticipant: doc.firstParticipant,
                 secondParticipant: doc.secondParticipant,
-                messages: doc.messages,
+                messages: doc.messages.length > 0 ? [doc.messages.pop()] : [],
               }) as ChatDto,
-          ),
-        ),
-        combineLatestWith(this.users$),
-        map(([chats, users]) => {
+          );
+          const uidList = chatDto.map((chat) => {
+            if (chat.firstParticipant === user.uid)
+              return chat.secondParticipant;
+            return chat.firstParticipant;
+          });
+          uidList.push(user.uid);
+          return zip(
+            of(chatDto),
+            collectionData(
+              query(this.usersCollectionRef, where('uid', 'in', uidList)),
+            ),
+            of(user),
+          );
+        }),
+        switchMap(([chats, users, user]) => {
           const usersRecord = users.reduce(
             (acc, user) => {
               acc[user.uid] = user;
@@ -101,16 +114,33 @@ export class ChatService {
             },
             {} as Record<string, MessengerUser>,
           );
-          // console.log(chats);
-          // console.log(usersRecord);
-          return chats.map(
-            (chat) =>
-              ({
-                ...chat,
-                firstParticipant: usersRecord[chat.firstParticipant],
-                secondParticipant: usersRecord[chat.secondParticipant],
-              }) as Chat,
+          return zip(
+            of(
+              chats.map(
+                (chat) =>
+                  ({
+                    ...chat,
+                    firstParticipant: usersRecord[chat.firstParticipant],
+                    secondParticipant: usersRecord[chat.secondParticipant],
+                  }) as Chat,
+              ),
+            ),
+            of(user),
           );
+        }),
+        tap((data) => console.log('Tap On:', data)),
+        tap(([chats, user]) => {
+          const prevChats = this.chats();
+          if (!prevChats) this.chats.set(chats);
+          else if (chats.length > prevChats.length) {
+            this.chats.mutate((prev) => {
+              if (!prev) return;
+              const prevIds = prev.map((chat) => chat.id);
+              chats.forEach((chat) => {
+                if (!prevIds.includes(chat.id)) prev.push(chat);
+              });
+            });
+          }
         }),
       );
     }),
@@ -121,7 +151,6 @@ export class ChatService {
     switchMap(([id, user]) => {
       if (!id || !user) return of(null);
       return docData(doc(this.firestore, 'chats', id)).pipe(
-        tap((data) => console.log('Tap On:', data)),
         distinctUntilKeyChanged('messages', (a, b) => a.length === b.length),
         map((chat) => chat as unknown as ChatDto),
         switchMap((chat) => {
@@ -210,8 +239,7 @@ export class ChatService {
   }
 
   constructor() {
-    // effect(() => console.log('Selected Chat:', this.selectedChat()));
-    // this.selectedChat$.subscribe((data) => console.log('This Chat:', data));
     const selectedChatSignal = toSignal(this.selectedChat$);
+    const chatsSignal = toSignal(this.chats$);
   }
 }
