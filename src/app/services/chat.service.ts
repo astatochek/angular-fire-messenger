@@ -128,19 +128,20 @@ export class ChatService {
             of(user),
           );
         }),
-        tap((data) => console.log('Tap On:', data)),
+        tap((data) => console.log('Tap:', data)),
         tap(([chats, user]) => {
-          const prevChats = this.chats();
-          if (!prevChats) this.chats.set(chats);
-          else if (chats.length > prevChats.length) {
-            this.chats.mutate((prev) => {
-              if (!prev) return;
-              const prevIds = prev.map((chat) => chat.id);
-              chats.forEach((chat) => {
-                if (!prevIds.includes(chat.id)) prev.push(chat);
-              });
-            });
-          }
+          // const prevChats = this.chats();
+          // if (!prevChats) this.chats.set(chats);
+          // else if (chats.length > prevChats.length) {
+          //   this.chats.mutate((prev) => {
+          //     if (!prev) return;
+          //     const prevIds = prev.map((chat) => chat.id);
+          //     chats.forEach((chat) => {
+          //       if (!prevIds.includes(chat.id)) prev.push(chat);
+          //     });
+          //   });
+          // }
+          this.chats.set(chats);
         }),
       );
     }),
@@ -161,14 +162,22 @@ export class ChatService {
               : chat.firstParticipant;
           return zip(of(chat), docData(doc(this.usersCollectionRef, uid)));
         }),
-        map(
-          ([chat, other]) =>
-            ({
-              ...chat,
-              firstParticipant: this.user()!,
-              secondParticipant: other as unknown as MessengerUser,
-            }) as Chat,
-        ),
+        map(([chat, other]) => {
+          const user = this.user()!;
+          const firstParticipant: MessengerUser =
+            chat.firstParticipant === user.uid
+              ? (other as MessengerUser)
+              : user;
+          const secondParticipant: MessengerUser =
+            chat.secondParticipant === user.uid
+              ? (other as MessengerUser)
+              : user;
+          return {
+            ...chat,
+            firstParticipant: firstParticipant,
+            secondParticipant: secondParticipant,
+          } as Chat;
+        }),
         tap((chat) => {
           const selectedChat = this.selectedChat();
           if (!selectedChat) this.selectedChat.set(chat);

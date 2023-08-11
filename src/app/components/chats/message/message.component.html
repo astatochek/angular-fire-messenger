@@ -12,7 +12,7 @@
       [ngClass]="chat[message.sender].uid === user.uid ? 'ml-2' : 'mr-2'"
     >
       <app-avatar
-        [username]="user.email"
+        [username]="chat[message.sender].email"
         [styles]="['rounded-[50%]', 'w-11', 'shadow-sm']"
         class="w-11"
       />
@@ -25,7 +25,7 @@
       "
     >
       <p class="text-xs mb-2 text-white-70 font-normal select-all">
-        {{ user.email }}
+        {{ chat[message.sender].email }}
       </p>
       <div
         class="max-w-xl break-words py-2 px-4 bg-raisin-black text-xs hover:bg-charleston-green shadow-sm"

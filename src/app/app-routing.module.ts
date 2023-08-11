@@ -1,4 +1,4 @@
-import { computed, inject, NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { CanActivateFn, Router, RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -7,6 +7,7 @@ import { SearchComponent } from './components/search/search.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
 import { ChatComponent } from './components/chats/chat/chat.component';
+import { ChatService } from './services/chat.service';
 
 const AuthGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -16,6 +17,15 @@ const AuthGuard: CanActivateFn = (route, state) => {
   } else {
     return preAuthRoutes.includes(state.url);
   }
+};
+
+const ChatsGuard: CanActivateFn = (route, state) => {
+  const chatService = inject(ChatService);
+  const router = inject(Router);
+  const selected = chatService.selected();
+  if (selected && state.url === '/chats')
+    router.navigate(['/chats', selected]).then();
+  return true;
 };
 
 const routes: Routes = [
@@ -38,7 +48,7 @@ const routes: Routes = [
   {
     path: 'chats',
     component: ChatsComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, ChatsGuard],
     children: [
       {
         path: ':id',
