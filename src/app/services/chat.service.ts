@@ -45,11 +45,9 @@ export class ChatService {
   private router = inject(Router);
   private firestore = inject(Firestore);
   private authService = inject(AuthService);
-  private searchService = inject(SearchService);
 
   private usersCollectionRef = collection(this.firestore, 'users');
 
-  private users$ = this.searchService.users$;
   private user$ = this.authService.user$;
 
   private user = computed(() => this.authService.user());
@@ -60,6 +58,10 @@ export class ChatService {
     this.selectedChatId.next(id);
   }
 
+  public unselectChat() {
+    this.selectedChatId.next(null);
+  }
+
   public selected = toSignal(this.selectedChatId.asObservable());
 
   private chatsCollectionRef = collection(this.firestore, 'chats');
@@ -68,6 +70,7 @@ export class ChatService {
     switchMap((user) => {
       if (!user) {
         this.chats.update(() => null);
+        this.unselectChat();
         return of(null);
       }
       return of(user).pipe(

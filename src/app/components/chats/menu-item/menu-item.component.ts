@@ -49,6 +49,10 @@ export class MenuItemComponent {
     return this.chat.firstParticipant;
   }
 
+  getFullName(user: MessengerUser) {
+    return `${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()}`;
+  }
+
   selected: Signal<string | null | undefined> = computed(() =>
     this.chatService.selected(),
   );

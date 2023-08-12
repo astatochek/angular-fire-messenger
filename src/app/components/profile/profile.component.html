@@ -1,11 +1,12 @@
 <main
   class="w-full h-screen overflow-x-hidden pr-w-scroll overflow-y-auto pt-navbar-size bg-american-purple background-with-gradient flex flex-col justify-start items-center"
 >
-  <div class="grid grid-cols-2 w-[60rem] mt-navbar-size">
-    <div class="flex flex-col justify-start items-center mt-2 slide-in-left">
-      <h1 class="font-bold text-4xl mb-5 drop-shadow-md">Profile Info</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 w-[60rem] mb-4 mt-8 md:mt-navbar-size">
+
+    <div class="order-2 md:order-1 flex flex-col justify-start items-center mt-8 ms:mt-2 slide-in-bottom md:slide-in-left">
+      <h1 class="hidden md:flex font-bold text-4xl mb-5 drop-shadow-md">Profile Info</h1>
       <div
-        class="bg-dark-purple border-2 border-white-40 px-10 py-4 rounded-2xl"
+        class="bg-dark-purple border-2 border-white-40 px-4 md:px-10 py-4 rounded-2xl"
       >
         <form
           [formGroup]="profileForm"
@@ -13,7 +14,7 @@
           class="flex flex-col justify-start items-center w-form-len"
         >
           <h2 class="font-normal text-lg">Edit your profile information</h2>
-          <div class="flex flex-row justify-between items-center w-form-len">
+          <div class="flex flex-row justify-between items-center w-full">
             <input
               type="text"
               class="input-valid w-[40%]"
@@ -63,13 +64,14 @@
         </form>
       </div>
     </div>
-    <div class="flex flex-col justify-end items-center slide-in-right">
+
+    <div class="order-1 md:order-2 flex flex-col justify-end items-center slide-in-bottom md:slide-in-right">
       <app-avatar
         [username]="user()?.email ?? ''"
         [styles]="['w-full', 'rounded-[50%]', 'shadow']"
-        class="w-72"
+        class="w-52 sm:w-64 md:w-72"
       />
-      <div class="flex flex-col justify-start items-center w-form-len mt-8">
+      <div class="hidden md:flex flex-col justify-start items-center w-form-len mt-8">
         <h2 class="font-normal text-lg select-all">
           {{ user()?.email ?? '...' }}
         </h2>

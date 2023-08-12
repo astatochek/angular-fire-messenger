@@ -9,5 +9,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
   router = inject(Router);
 
-  constructor() {}
+  constructor() {
+    setTimeout(() => this.router.navigate(['test']), 0);
+  }
 }

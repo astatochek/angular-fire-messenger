@@ -2,7 +2,7 @@
   class="w-full h-screen overflow-y-auto pt-navbar-size pr-scroll bg-american-purple background-with-gradient flex flex-col justify-start items-center"
 >
   <div
-    class="my-16 w-[40rem] flex flex-col justify-start items-center slide-in-bottom"
+    class="my-4 sm:my-16 w-[20rem] sm:w-[40rem] flex flex-col justify-start items-center slide-in-bottom"
   >
     <div class="flex items-center w-full">
       <label for="simple-search" class="sr-only">Search</label>
@@ -53,32 +53,38 @@
               class="rounded-tl-xl pl-8"
               [ngClass]="users.length === 0 ? 'rounded-bl-xl' : ''"
             >
-              Email
+              Avatar
             </th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Email</th>
+            <th class="hidden sm:table-cell">First Name</th>
+            <th class="hidden sm:table-cell">Last Name</th>
             <th
               class="rounded-tr-xl w-[5rem]"
               [ngClass]="users.length === 0 ? 'rounded-br-xl' : ''"
-            ></th>
+            >
+              Chat
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="let user of users(); index as index"
             class="bg-opacity-10 font-normal text-sm hover:bg-white-10 transition ease-in-out duration-300"
-            [ngClass]="index % 2 === 1 ? 'bg-black' : 'bg-transparent'"
+            [ngClass]="index % 2 === 0 ? 'bg-black' : 'bg-transparent'"
           >
             <td
-              class="select-all pl-8 py-5"
+              class="pl-7 py-5"
               [ngClass]="index === users().length - 1 ? 'rounded-bl-xl' : ''"
             >
-              {{ user.email | truncate: 14 }}
+             <app-avatar [username]="user.email" [styles]="['rounded-xl', 'w-10', 'sm:w-16']" class=""></app-avatar>
             </td>
-            <td class="select-all">
+            <td class="select-all transition ease-in-out duration-300 text-white hover:text-spanish-viridian hover:underline">
+              {{ user.email | truncate: 13 }}
+            </td>
+            <td class="hidden sm:table-cell select-all">
               {{ user.firstName | truncate: 12 }}
             </td>
-            <td class="select-all">
+            <td class="hidden sm:table-cell select-all">
               {{ user.lastName | truncate: 12 }}
             </td>
             <td [ngClass]="index === users().length - 1 ? 'rounded-br-xl' : ''">

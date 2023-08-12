@@ -1,21 +1,90 @@
 <nav
-  class="w-full sticky shadow-xl z-10 top-0 left-0 h-navbar-size bg-charleston-green text-white flex flex-row justify-between items-center">
-  <div *ngIf="isLoggedIn()" class="px-2 grid grid-cols-3 w-left-nav-menu gap-1">
-    <a class="navbar-button text-center" routerLink="/search">Search</a>
-    <a class="navbar-button text-center" routerLink="/chats">Chats</a>
-    <a class="navbar-button text-center" routerLink="/profile">Profile</a>
+  class="w-full sticky shadow-xl z-10 top-0 left-0 h-navbar-size bg-charleston-green text-white flex flex-row justify-around md:justify-between items-center"
+>
+  <div *ngIf="isLoggedIn()" class="px-2 grid grid-cols-3 w-[19rem] gap-1">
+    <a
+      class="navbar-button text-center flex items-center justify-center"
+      routerLink="/search"
+    >
+      <svg
+        class="flex md:hidden h-8"
+        viewBox="0 0 96 96"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_1_2)">
+          <path
+            d="M40 48C48.8366 48 56 40.8366 56 32C56 23.1634 48.8366 16 40 16C31.1634 16 24 23.1634 24 32C24 40.8366 31.1634 48 40 48Z"
+            fill="white"
+          />
+          <path
+            d="M41.4 56.04C30.48 55.64 8 61.08 8 72V80H46.16C36.28 68.96 41.24 56.44 41.4 56.04Z"
+            fill="white"
+          />
+          <path
+            d="M77.72 72.08C79.16 69.72 80 66.96 80 64C80 55.16 72.84 48 64 48C55.16 48 48 55.16 48 64C48 72.84 55.16 80 64 80C66.96 80 69.72 79.12 72.08 77.72L82.36 88L88 82.36L77.72 72.08ZM64 72C59.6 72 56 68.4 56 64C56 59.6 59.6 56 64 56C68.4 56 72 59.6 72 64C72 68.4 68.4 72 64 72Z"
+            fill="white"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_1_2">
+            <rect width="96" height="96" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+      <p class="hidden md:flex">Search</p>
+    </a>
+    <a
+      class="navbar-button text-center flex items-center justify-center"
+      routerLink="/chats"
+    >
+      <svg
+        class="flex md:hidden h-8"
+        viewBox="0 0 96 96"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_1_10)">
+          <path
+            d="M80 8H16C11.6 8 8 11.6 8 16V88L24 72H80C84.4 72 88 68.4 88 64V16C88 11.6 84.4 8 80 8Z"
+            fill="white"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_1_10">
+            <rect width="96" height="96" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+      <p class="hidden md:flex">Chats</p>
+    </a>
+    <a class="navbar-button text-center flex items-center justify-center" routerLink="/profile">
+      <svg
+        class="flex md:hidden h-8"
+        fill="none"
+        version="1.1"
+        viewBox="0 0 96 96"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+      >
+        <path
+          d="m48.402 7.6523a40.078 40.078 0 0 0-40.078 40.08 40.078 40.078 0 0 0 40.078 40.078 40.078 40.078 0 0 0 40.078-40.078 40.078 40.078 0 0 0-40.078-40.08zm0 11.01a13.359 13.359 0 0 1 13.359 13.359 13.359 13.359 0 0 1-13.359 13.359 13.359 13.359 0 0 1-13.359-13.359 13.359 13.359 0 0 1 13.359-13.359zm-0.017578 37.73a54.713 54.713 0 0 1 28.412 7.9629 33.634 33.634 0 0 1-28.412 15.666 33.634 33.634 0 0 1-28.377-15.602 54.713 54.713 0 0 1 28.377-8.0273z"
+          fill="#fff"
+          stroke-width="0"
+        />
+      </svg>
+      <p class="hidden md:flex">Profile</p>
+    </a>
   </div>
-  <div class="grid grid-cols-3 w-full min-w-fit" *ngIf="isLoggedIn()">
-    <div></div>
-    <div class="px-4 py-1 text-center">
-    </div>
-    <div class="px-4 py-1 select-all text-right">
-      {{ username() }}
-    </div>
+  <div
+    class="hidden md:flex px-4 py-1 select-all text-center"
+    *ngIf="isLoggedIn()"
+  >
+    {{ username() }}
   </div>
 
   <!--not logged in-->
-  <div *ngIf="!isLoggedIn()" class="mx-2 grid grid-cols-2 w-1/5">
+  <div *ngIf="!isLoggedIn()" class="mx-2 grid grid-cols-2 w-[13rem]">
     <a class="navbar-button text-center" routerLink="/login">Login</a>
     <a class="navbar-button text-center" routerLink="/register">Register</a>
   </div>

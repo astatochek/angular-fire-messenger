@@ -37,7 +37,7 @@
   }
 
   .button-green {
-    @apply transition ease-in-out duration-300 bg-spanish-viridian py-2 font-medium text-base rounded-xl active:bg-spanish-viridian hover:bg-[#00946c] disabled:bg-spanish-viridian disabled:opacity-80;
+    @apply transition ease-in-out duration-300 bg-spanish-viridian py-2 font-medium rounded-xl active:bg-spanish-viridian hover:bg-[#00946c] disabled:bg-spanish-viridian disabled:opacity-80;
   }
 
   .background-with-gradient {

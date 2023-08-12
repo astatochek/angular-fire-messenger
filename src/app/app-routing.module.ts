@@ -28,6 +28,24 @@ const ChatsGuard: CanActivateFn = (route, state) => {
   return true;
 };
 
+const ChatGuard: CanActivateFn = (route, state) => {
+  const chatService = inject(ChatService);
+  const router = inject(Router);
+  const chats = chatService.chats();
+  if (!chats) {
+    router.navigate(['chats']).then();
+  } else {
+    const ids = chats.map((chat) => chat.id);
+    const id = state.url.split('/').pop()!;
+    if (!ids.includes(id)) {
+      const selected = chatService.selected();
+      if (!selected) router.navigate(['chats']).then();
+      else router.navigate(['chats', selected]).then();
+    }
+  }
+  return true;
+};
+
 const routes: Routes = [
   { path: '', redirectTo: '/profile', pathMatch: 'full' },
   {
@@ -53,7 +71,7 @@ const routes: Routes = [
       {
         path: ':id',
         component: ChatComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, ChatGuard],
       },
     ],
   },

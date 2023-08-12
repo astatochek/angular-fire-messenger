@@ -2,16 +2,17 @@
   class="w-full min-h-screen h-fit pt-navbar-size overflow-y-hidden bg-american-purple background-with-gradient flex flex-col justify-start items-center"
 >
   <div
-    class="flex flex-col justify-start items-center mt-[3.8rem] slide-in-bottom"
+    class="flex flex-col justify-start items-center mt-10 md:mt-[3.8rem] slide-in-bottom"
   >
-    <!--TODO: add responsive breakpoints-->
     <h1 class="font-bold text-4xl mb-5 drop-shadow-md">Sign Up</h1>
     <form
       [formGroup]="registerForm"
       (ngSubmit)="onSubmit()"
       class="bg-dark-purple border-2 border-white-40 px-10 py-4 rounded-2xl"
     >
-      <div class="flex flex-col justify-start items-center w-form-len">
+      <div
+        class="flex flex-col justify-start items-center w-[15rem] md:w-form-len"
+      >
         <h2 class="font-normal text-lg">Register a new account</h2>
         <input
           type="email"
@@ -25,31 +26,35 @@
               : 'input-invalid'
           "
         />
-        <div class="flex flex-row justify-between items-center w-form-len">
-          <input
-            type="text"
-            [formControl]="registerForm.controls.firstName"
-            class="w-[40%]"
-            placeholder="Name*"
-            [ngClass]="
-              registerForm.controls.firstName.valid ||
-              !registerForm.controls.firstName.dirty
-                ? 'input-valid'
-                : 'input-invalid'
-            "
-          />
-          <input
-            type="text"
-            [formControl]="registerForm.controls.lastName"
-            class="w-[55%]"
-            placeholder="Surname*"
-            [ngClass]="
-              registerForm.controls.lastName.valid ||
-              !registerForm.controls.lastName.dirty
-                ? 'input-valid'
-                : 'input-invalid'
-            "
-          />
+        <div class="w-full grid grid-cols-[1.5fr_2fr] justify-around gap-4">
+          <div>
+            <input
+              type="text"
+              [formControl]="registerForm.controls.firstName"
+              placeholder="Name*"
+              class="w-full"
+              [ngClass]="
+                registerForm.controls.firstName.valid ||
+                !registerForm.controls.firstName.dirty
+                  ? 'input-valid'
+                  : 'input-invalid'
+              "
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              [formControl]="registerForm.controls.lastName"
+              placeholder="Surname*"
+              class="w-full"
+              [ngClass]="
+                registerForm.controls.lastName.valid ||
+                !registerForm.controls.lastName.dirty
+                  ? 'input-valid'
+                  : 'input-invalid'
+              "
+            />
+          </div>
         </div>
         <input
           type="password"
@@ -63,7 +68,7 @@
               : 'input-invalid'
           "
         />
-        <div class="flex flex-row justify-between w-full mt-6">
+        <div class="flex flex-row justify-between w-full mt-6 text-sm md:text-base">
           <button
             type="submit"
             [disabled]="registerForm.invalid"

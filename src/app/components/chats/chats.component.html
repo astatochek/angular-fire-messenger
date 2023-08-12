@@ -1,10 +1,10 @@
 <main
   class="w-full h-screen pt-navbar-size bg-dark-purple chat-background-with-gradient flex flex-col justify-start items-center"
 >
-  <div class="flex flex-row justify-start items-start h-full w-full">
+  <div class="flex flex-col md:flex-row justify-start items-start h-full w-full">
     <div
       *ngIf="chats() as chats"
-      class="bg-charleston-green w-left-chat-menu h-full shadow-sm flex flex-col justify-start overflow-y-auto direction-rtl"
+      class="bg-charleston-green w-full md:w-left-chat-menu max-h-[40rem] md:h-full shadow-sm flex flex-col justify-start overflow-y-auto direction-rtl"
     >
       <app-menu-item
         *ngFor="let chat of chats"

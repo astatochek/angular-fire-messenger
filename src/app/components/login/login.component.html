@@ -1,16 +1,15 @@
 <main
   class="w-full min-h-screen h-fit pt-navbar-size overflow-y-hidden bg-american-purple background-with-gradient flex flex-col justify-start items-center"
 >
-  <div class="flex flex-col justify-start items-center mt-20 slide-in-bottom">
-    <!--TODO: add responsive breakpoints-->
+  <div class="flex flex-col justify-start items-center mt-10 md:mt-20 slide-in-bottom">
     <h1 class="font-bold text-4xl mb-5 drop-shadow-md">Sign In</h1>
     <form
       [formGroup]="loginForm"
       (ngSubmit)="onSubmit()"
       class="bg-dark-purple border-2 border-white-40 px-10 py-4 rounded-2xl"
     >
-      <div class="flex flex-col justify-start items-center w-form-len">
-        <h2 class="font-normal text-lg">Please login to your account</h2>
+      <div class="flex flex-col justify-start items-center w-[15rem] md:w-form-len">
+        <h2 class="font-normal text-lg text-center">Please login to your account</h2>
         <input
           type="email"
           placeholder="example@mail.com*"
@@ -37,14 +36,14 @@
           <button
             type="submit"
             [disabled]="!loginForm.valid"
-            class="button-green w-2/5"
+            class="button-green test:sm md:text-base w-2/5"
           >
             Log In
           </button>
           <div class="flex justify-center items-center">or</div>
           <a
             routerLink="/register"
-            class="transition ease-in-out text-center duration-300 hover:border-white border-2 border-white-70 w-2/5 py-2 font-medium text-base rounded-xl hover:bg-white-10 active:bg-transparent"
+            class="transition ease-in-out text-center duration-300 hover:border-white border-2 border-white-70 w-2/5 py-2 font-medium text-sm md:text-base rounded-xl hover:bg-white-10 active:bg-transparent"
           >
             Register
           </a>
