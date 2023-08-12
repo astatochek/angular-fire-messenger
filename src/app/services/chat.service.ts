@@ -70,18 +70,18 @@ export class ChatService {
         this.chats.update(() => null);
         return of(null);
       }
-      return zip(
-        of(user),
-        collectionData(
-          query(
-            this.chatsCollectionRef,
-            or(
-              where('firstParticipant', '==', user.uid),
-              where('secondParticipant', '==', user.uid),
+      return of(user).pipe(
+        combineLatestWith(
+          collectionData(
+            query(
+              this.chatsCollectionRef,
+              or(
+                where('firstParticipant', '==', user.uid),
+                where('secondParticipant', '==', user.uid),
+              ),
             ),
           ),
         ),
-      ).pipe(
         switchMap(([user, arr]) => {
           const chatDto = arr.map(
             (doc) =>
@@ -130,18 +130,23 @@ export class ChatService {
         }),
         tap((data) => console.log('Tap:', data)),
         tap(([chats, user]) => {
-          // const prevChats = this.chats();
-          // if (!prevChats) this.chats.set(chats);
-          // else if (chats.length > prevChats.length) {
-          //   this.chats.mutate((prev) => {
-          //     if (!prev) return;
-          //     const prevIds = prev.map((chat) => chat.id);
-          //     chats.forEach((chat) => {
-          //       if (!prevIds.includes(chat.id)) prev.push(chat);
-          //     });
-          //   });
-          // }
-          this.chats.set(chats);
+          const prevChats = this.chats();
+          if (!prevChats) this.chats.set(chats);
+          else
+            this.chats.mutate((prev) => {
+              if (!prev) return;
+              chats.forEach((chat) => {
+                const prevIds = prev.map((chat) => chat.id);
+                if (!prevIds.includes(chat.id)) prev.unshift(chat);
+                else {
+                  const index = prevIds.indexOf(chat.id);
+                  if (prev[index].messages[0] !== chat.messages[0]) {
+                    prev[index].messages[0] = chat.messages[0];
+                  }
+                }
+              });
+            });
+          // this.chats.set(chats);
         }),
       );
     }),
