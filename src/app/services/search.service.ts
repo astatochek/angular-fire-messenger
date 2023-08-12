@@ -9,10 +9,12 @@ import {
 } from '@angular/fire/firestore';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
+  combineLatestWith,
   debounceTime,
   distinctUntilChanged,
   map,
   Observable,
+  of,
   switchMap,
   tap,
 } from 'rxjs';
@@ -41,25 +43,18 @@ export class SearchService {
     MessengerUser[]
   >;
 
-  private queriedUsers$ = this.authService.user$.pipe(
-    distinctUntilChanged(),
-    debounceTime(300),
-    switchMap(() =>
-      collectionData(
-        query(
-          this.usersCollectionRef,
-          where('uid', '!=', this.user()?.uid ?? ''),
-        ),
-      ),
-    ),
-    map((users) =>
-      (users as unknown as MessengerUser[]).filter(
+  private queriedUsers$ = this.users$.pipe(
+    combineLatestWith(this.authService.user$, this.keyword$),
+    map(([users, thisUser, keyword]) => {
+      if (!thisUser) return [];
+      return users.filter(
         (user) =>
-          user.email.includes(this.keyword()) ||
-          user.firstName.toLowerCase().includes(this.keyword()) ||
-          user.lastName.toLowerCase().includes(this.keyword()),
-      ),
-    ),
+          user.uid !== thisUser.uid &&
+          (user.email.includes(keyword) ||
+            user.firstName.toLowerCase().includes(keyword) ||
+            user.lastName.toLowerCase().includes(keyword)),
+      );
+    }),
   );
 
   private queriedUsersSignalFromObservable = toSignal(this.queriedUsers$);
