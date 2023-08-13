@@ -1,42 +1,32 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { ParamMap, Router } from '@angular/router';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   Firestore,
   collectionData,
   collection,
-  getDoc,
   query,
   or,
   where,
   setDoc,
-  addDoc,
   doc,
   updateDoc,
   Timestamp,
   docData,
 } from '@angular/fire/firestore';
 import {
-  combineLatest,
-  combineLatestAll,
   combineLatestWith,
-  debounceTime,
-  distinctUntilChanged,
   distinctUntilKeyChanged,
-  from,
   map,
-  merge,
-  Observable,
   of,
   Subject,
   switchMap,
   tap,
   zip,
 } from 'rxjs';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Chat, ChatDto, Message } from '../models/chat.interface';
 import { AuthService } from './auth.service';
 import { MessengerUser } from '../models/user.interface';
-import { SearchService } from './search.service';
 
 @Injectable({
   providedIn: 'root',
@@ -132,7 +122,7 @@ export class ChatService {
           );
         }),
         tap((data) => console.log('Tap:', data)),
-        tap(([chats, user]) => {
+        tap(([chats]) => {
           const prevChats = this.chats();
           if (!prevChats) this.chats.set(chats);
           else
@@ -256,7 +246,7 @@ export class ChatService {
   }
 
   constructor() {
-    const selectedChatSignal = toSignal(this.selectedChat$);
-    const chatsSignal = toSignal(this.chats$);
+    toSignal(this.selectedChat$);
+    toSignal(this.chats$);
   }
 }

@@ -1,17 +1,5 @@
-import {
-  Component,
-  computed,
-  inject,
-  Input,
-  OnChanges,
-  Signal,
-  signal,
-  SimpleChanges,
-  WritableSignal,
-} from '@angular/core';
+import { Component, computed, inject, Input, Signal } from '@angular/core';
 import { ChatService } from '../../../services/chat.service';
-import IChat from '../../../models/chat';
-import { truncate } from 'lodash';
 import { Chat } from '../../../models/chat.interface';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';

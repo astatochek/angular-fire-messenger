@@ -1,23 +1,8 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { AuthService } from './auth.service';
-import {
-  collection,
-  collectionData,
-  Firestore,
-  query,
-  where,
-} from '@angular/fire/firestore';
+import { collection, collectionData, Firestore } from '@angular/fire/firestore';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import {
-  combineLatestWith,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  Observable,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { combineLatestWith, map, Observable } from 'rxjs';
 import { MessengerUser } from '../models/user.interface';
 
 @Injectable({
@@ -25,8 +10,6 @@ import { MessengerUser } from '../models/user.interface';
 })
 export class SearchService {
   private authService = inject(AuthService);
-
-  private user = computed(() => this.authService.user());
 
   private firestore = inject(Firestore);
   private usersCollectionRef = collection(this.firestore, 'users');

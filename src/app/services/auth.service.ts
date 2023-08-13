@@ -12,8 +12,6 @@ import {
   createUserWithEmailAndPassword,
   user,
   updatePassword,
-  updateEmail,
-  User,
 } from '@angular/fire/auth';
 import {
   collection,

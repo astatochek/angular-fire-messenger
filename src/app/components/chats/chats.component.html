@@ -4,7 +4,7 @@
   <div class="flex flex-col md:flex-row justify-start items-start h-full w-full">
     <div
       *ngIf="chats() as chats"
-      class="bg-charleston-green w-full md:w-left-chat-menu max-h-[40rem] md:h-full shadow-sm flex flex-col justify-start overflow-y-auto direction-rtl"
+      class="bg-charleston-green w-full md:w-left-chat-menu h-fit md:h-full flex flex-col justify-start overflow-y-auto direction-rtl slide-in-top md:animate-none shadow-2xl shadow-dark-purple"
     >
       <app-menu-item
         *ngFor="let chat of chats"

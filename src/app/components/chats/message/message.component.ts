@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  Input,
-  OnInit,
-  Signal,
-} from '@angular/core';
+import { Component, computed, inject, Input, Signal } from '@angular/core';
 import { AvatarComponent } from '../../avatar/avatar.component';
 import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { Chat, Message } from '../../../models/chat.interface';
