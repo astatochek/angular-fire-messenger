@@ -13,7 +13,7 @@
     >
       <app-avatar
         [username]="chat[message.sender].email"
-        [styles]="['rounded-[50%]', 'w-11', 'shadow-sm']"
+        [size]="64"
         class="w-11"
       />
       <p class="mt-2 select-all">{{ getDate() | date: "HH:mm" }}</p>

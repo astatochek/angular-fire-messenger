@@ -75,9 +75,9 @@ export class ChatService {
             ),
           ),
         ),
-        switchMap(([user, arr]) => {
+        switchMap(([user, arr]: any) => {
           const chatDto = arr.map(
-            (doc) =>
+            (doc: any) =>
               ({
                 id: doc.id,
                 firstParticipant: doc.firstParticipant,
@@ -85,7 +85,7 @@ export class ChatService {
                 messages: doc.messages.length > 0 ? [doc.messages.pop()] : [],
               }) as ChatDto,
           );
-          const uidList = chatDto.map((chat) => {
+          const uidList = chatDto.map((chat: any) => {
             if (chat.firstParticipant === user.uid)
               return chat.secondParticipant;
             return chat.firstParticipant;
@@ -110,7 +110,7 @@ export class ChatService {
           return zip(
             of(
               chats.map(
-                (chat) =>
+                (chat: any) =>
                   ({
                     ...chat,
                     firstParticipant: usersRecord[chat.firstParticipant],
@@ -126,9 +126,9 @@ export class ChatService {
           const prevChats = this.chats();
           if (!prevChats) this.chats.set(chats);
           else
-            this.chats.mutate((prev) => {
+            this.chats.update((prev) => {
               if (!prev) return;
-              chats.forEach((chat) => {
+              chats.forEach((chat: any) => {
                 const prevIds = prev.map((chat) => chat.id);
                 if (!prevIds.includes(chat.id)) prev.unshift(chat);
                 else {
@@ -138,6 +138,7 @@ export class ChatService {
                   }
                 }
               });
+              return chats
             });
           // this.chats.set(chats);
         }),
@@ -182,9 +183,10 @@ export class ChatService {
           else if (chat.id !== selectedChat.id) this.selectedChat.set(chat);
           else if (chat.messages.length > selectedChat.messages.length) {
             const start = selectedChat.messages.length;
-            this.selectedChat.mutate((prev) => {
-              if (!prev) return;
+            this.selectedChat.update((prev) => {
+              if (!prev) return prev;
               prev.messages.push(...chat.messages.slice(start));
+              return prev
             });
           }
         }),
@@ -198,7 +200,7 @@ export class ChatService {
   public goToChatWith(uid: string) {
     const user = this.user();
     if (!user) return;
-    const chat = this.chats()?.find(
+    const chat = this.chats()!.find(
       (chat) =>
         chat.firstParticipant.uid === uid || chat.secondParticipant.uid === uid,
     );
@@ -235,7 +237,7 @@ export class ChatService {
     };
     const messages = chat.messages;
     messages.push(message);
-    updateDoc(doc(this.firestore, 'chats', chat.id), {
+    updateDoc(doc(this.firestore, 'chats', chat.id) as any, {
       messages: messages,
     })
       .then(console.log)

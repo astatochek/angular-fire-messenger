@@ -76,7 +76,7 @@
               class="pl-7 py-5"
               [ngClass]="index === users().length - 1 ? 'rounded-bl-xl' : ''"
             >
-             <app-avatar [username]="user.email" [styles]="['rounded-xl', 'w-10', 'sm:w-16']" class=""></app-avatar>
+             <app-avatar [username]="user.email" [size]="64" class=""></app-avatar>
             </td>
             <td class="select-all transition ease-in-out duration-300 text-white hover:text-spanish-viridian hover:underline">
               {{ user.email | truncate: 13 }}

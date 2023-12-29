@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "messenger-angular-app:build:production"
+              "buildTarget": "messenger-angular-app:build:production"
             },
             "development": {
-              "browserTarget": "messenger-angular-app:build:development"
+              "buildTarget": "messenger-angular-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "messenger-angular-app:build"
+            "buildTarget": "messenger-angular-app:build"
           }
         },
         "test": {

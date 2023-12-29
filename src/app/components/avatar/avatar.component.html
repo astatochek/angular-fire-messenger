@@ -1,6 +1,9 @@
-<img
-  src="https://i.pinimg.com/1200x/af/b8/88/afb88877c6dfbc6cd069d237bcbd6e94.jpg"
-  alt="avatar"
-  [ngClass]="styles"
->
+<div class="flex items-center justify-center">
+  <avvvatars
+    [value]="username"
+    [style]="$any('avatar')"
+    [size]="size"
+    [shadow]='true'
+  />
+</div>
 

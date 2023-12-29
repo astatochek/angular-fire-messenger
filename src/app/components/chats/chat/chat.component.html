@@ -5,7 +5,7 @@
   <ng-container *ngIf="chat() as chat">
     <div
       #messages
-      *ngFor="let message of chat.messages"
+      *ngFor="let message of chat.messages; trackBy: trackByMessage"
       [ngClass]="
         message && senderIsAuthUser(message) ? 'flex-row-reverse' : 'flex-row'
       "

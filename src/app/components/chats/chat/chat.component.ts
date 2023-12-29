@@ -73,4 +73,8 @@ export class ChatComponent implements AfterViewChecked {
       )
       .subscribe();
   }
+
+  trackByMessage(index: number, message: Message): number {
+    return message.timestamp.toMillis();
+  }
 }
