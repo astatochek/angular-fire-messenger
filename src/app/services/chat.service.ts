@@ -14,9 +14,9 @@ import {
   docData,
 } from '@angular/fire/firestore';
 import {
-  combineLatestWith,
+  combineLatestWith, debounceTime, distinctUntilChanged,
   distinctUntilKeyChanged,
-  map,
+  map, Observable,
   of,
   Subject,
   switchMap,
@@ -27,6 +27,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Chat, ChatDto, Message } from '../models/chat.interface';
 import { AuthService } from './auth.service';
 import { MessengerUser } from '../models/user.interface';
+import {isEqual} from "lodash";
 
 @Injectable({
   providedIn: 'root',
@@ -121,7 +122,7 @@ export class ChatService {
             of(user),
           );
         }),
-        tap((data) => console.log('Tap:', data)),
+        distinctUntilChanged(isEqual),
         tap(([chats]) => {
           const prevChats = this.chats();
           if (!prevChats) this.chats.set(chats);
@@ -150,10 +151,10 @@ export class ChatService {
     combineLatestWith(this.user$),
     switchMap(([id, user]) => {
       if (!id || !user) return of(null);
-      return docData(doc(this.firestore, 'chats', id)).pipe(
+      //@ts-ignore
+      return (docData<ChatDto>(doc(this.firestore as any, 'chats', id)) as any as Observable<ChatDto>).pipe(
         distinctUntilKeyChanged('messages', (a, b) => a.length === b.length),
-        map((chat) => chat as unknown as ChatDto),
-        switchMap((chat) => {
+        switchMap((chat: ChatDto) => {
           const user = this.user()!;
           const uid =
             chat.firstParticipant === user.uid
