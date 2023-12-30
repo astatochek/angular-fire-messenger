@@ -1,5 +1,5 @@
 import {
-  AfterViewChecked,
+  AfterViewChecked, ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: [],
   standalone: true,
   imports: [NgIf, NgForOf, NgClass, MessageComponent, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatComponent implements AfterViewChecked {
   route = inject(ActivatedRoute);

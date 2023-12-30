@@ -1,8 +1,8 @@
-import { Component, inject, Signal } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
 
 import { AvatarComponent } from '../avatar/avatar.component';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import {AsyncPipe, CommonModule, NgClass, NgForOf, NgIf} from '@angular/common';
 
 import { MessengerUser } from '../../models/user.interface';
 import { SearchService } from '../../services/search.service';
@@ -12,7 +12,8 @@ import { ChatService } from '../../services/chat.service';
   selector: 'app-search',
   templateUrl: './search.component.html',
   standalone: true,
-  imports: [AvatarComponent, TruncatePipe, NgClass, AsyncPipe, NgIf, NgForOf],
+  imports: [AvatarComponent, TruncatePipe, NgClass, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchComponent {
   private searchService = inject(SearchService);

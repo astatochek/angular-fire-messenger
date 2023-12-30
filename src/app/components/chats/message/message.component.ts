@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, Signal } from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, Input, Signal} from '@angular/core';
 import { AvatarComponent } from '../../avatar/avatar.component';
 import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { Chat, Message } from '../../../models/chat.interface';
@@ -10,6 +10,7 @@ import { MessengerUser } from '../../../models/user.interface';
   templateUrl: './message.component.html',
   standalone: true,
   imports: [AvatarComponent, NgClass, DatePipe, NgIf],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageComponent {
   authService = inject(AuthService);

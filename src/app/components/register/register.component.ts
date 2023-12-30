@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {
@@ -14,6 +14,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './register.component.html',
   imports: [ReactiveFormsModule, NgClass, RouterLink],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent {
   authService = inject(AuthService);

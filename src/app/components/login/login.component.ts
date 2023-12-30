@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   FormControl,
@@ -15,6 +15,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, RouterLink, NgClass],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
   router = inject(Router);

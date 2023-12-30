@@ -1,12 +1,12 @@
-import { Component, computed, inject, Input, Signal } from '@angular/core';
-import { ChatService } from '../../../services/chat.service';
-import { Chat } from '../../../models/chat.interface';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
-import { MessengerUser } from '../../../models/user.interface';
-import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
-import { AvatarComponent } from '../../avatar/avatar.component';
-import { TruncatePipe } from '../../../pipes/truncate.pipe';
+import {ChangeDetectionStrategy, Component, computed, inject, Input, Signal} from '@angular/core';
+import {ChatService} from '../../../services/chat.service';
+import {Chat} from '../../../models/chat.interface';
+import {Router, RouterLink} from '@angular/router';
+import {AuthService} from '../../../services/auth.service';
+import {MessengerUser} from '../../../models/user.interface';
+import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {AvatarComponent} from '../../avatar/avatar.component';
+import {TruncatePipe} from '../../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-menu-item',
@@ -21,6 +21,7 @@ import { TruncatePipe } from '../../../pipes/truncate.pipe';
     NgIf,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuItemComponent {
   router = inject(Router);

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -15,6 +15,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './profile.component.html',
   standalone: true,
   imports: [FormsModule, AvatarComponent, ReactiveFormsModule, NgClass],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent {
   private authService = inject(AuthService);
